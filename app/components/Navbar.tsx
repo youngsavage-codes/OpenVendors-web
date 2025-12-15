@@ -7,7 +7,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 5);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -16,20 +16,20 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`p-2 fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`p-2 fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
           scrolled ? 'bg-white shadow-md' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto ">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
+            
             <div className="flex-shrink-0">
               <a href="#" className="text-3xl font-bold text-black">
                 Logo
               </a>
             </div>
 
-            {/* Right side items */}
+            
             <div className="flex items-center gap-4">
               {/* Login Link */}
               <a
@@ -39,18 +39,18 @@ export default function Navbar() {
                 Log in
               </a>
 
-              {/* List Your Business Button */}
+              
               <a
                 href="#list-business"
-                className=" border border-gray-300 hidden sm:block px-5 py-3 bg-white text-black rounded-3xl hover:bg-gray-300 hover:border-gray-400 transition-colors duration-300 font-medium"
+                className=" border border-gray-300 hidden sm:block px-5 py-2 bg-white text-black rounded-3xl hover:bg-gray-300 hover:border-gray-400 transition-colors duration-300 font-medium"
               >
                 List Your Business
               </a>
 
               {/* Menu Button */}
-              <button className="bg-white flex items-center gap-2 px-5 py-3 border-2 border-gray-300 rounded-3xl hover:border-gray-400 transition-colors">
-                <Menu className="w-5 h-5" />
+              <button className="bg-white flex items-center gap-2 px-5 py-2 border-2 border-gray-300 rounded-3xl hover:border-gray-400 transition-colors">
                 <span className="font-medium">Menu</span>
+                <Menu className="w-5 h-5" />
               </button>
             </div>
           </div>
