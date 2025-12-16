@@ -122,11 +122,11 @@ const LandingPage: React.FC = () => {
       <div className="flex flex-col items-center text-center w-full max-w-6xl">
 
         {/* Heading */}
-        <h1 className="mt-10 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-inter text-black leading-tight mb-6">
+        <h1 className="mt-40 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-inter text-black leading-tight mb-6">
           Book local selfcare services
         </h1>
 
-        <p className="hidden font-inter text-black text-base sm:text-lg md:text-xl max-w-3xl mb-12">
+        <p className="hidden font-inter text-black lg:block md:block text-base sm:text-lg md:text-xl max-w-3xl mb-8">
           Discover top rated salons, barbers, medspas, wellness studios and beauty experts trusted by millions worldwide.
         </p>
 

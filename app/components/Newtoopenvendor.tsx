@@ -144,16 +144,21 @@ const Recomendedsection: React.FC = () => {
           onScroll={updateScrollButtons}
         >
           {openvendor.map((rec, index) => (
-            <div
+            
+            <a
+            href='/'
               key={index}
               className="min-w-[320px] rounded-t-2xl overflow-hidden cursor-pointer"
             >
               <div className="relative overflow-hidden">
+               
                 <img
                   src={rec.image}
                   alt={rec.name}
                   className="w-full h-48 object-cover hover:scale-110 transition-transform duration-300"
                 />
+                
+                
               </div>
            <div className="mt-2 font-medium">
               <div className="flex items-start justify-between mb-2">
@@ -166,8 +171,11 @@ const Recomendedsection: React.FC = () => {
               </div>
               <p className="text-gray-600 text-[16px]">{rec.location}</p>
               <p className="text-gray-500 text-[16px]">{rec.type}</p>
+              
             </div>
-          </div>
+            
+          </a>
+          
           ))}
         </div>
 
