@@ -3,7 +3,7 @@ import React from 'react'
 import Navbar from './components/Navbar'
 import Landingpage from './components/Landingpage'
 import Recomendedsection from './components/Recomendedsection';
-import Newtoopenvendor from './components/Newtoopenvendor'
+import Newtoopenvendor from './components/Newtoopenvendor/Newtoopenvendor'
 import Trending from './components/Trending';
 import Appadvertsection from './components/Appadvertsection';
 import Reviews from './components/Reviews';
