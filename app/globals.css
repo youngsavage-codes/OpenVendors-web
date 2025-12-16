@@ -31,10 +31,11 @@
         #ffffff,
         #d5d3ff,
         #ffd7ff,
-        #ffffff,
+        
+        #ffd7ff,
         #d5d3ff,
-        #ffd7ff
+        #ffffff
     );
-    background-size: 500% 500%;
-    animation: rotate-gradient 25s ease infinite;
+    background-size: 400% 400%;
+    animation: rotate-gradient 15s ease infinite;
 }
