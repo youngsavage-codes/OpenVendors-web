@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
 
           {/* About Openvendor */}
           <div className="flex flex-col gap-3">
-            <h3 className="font-bold text-black mb-2">About Openvendor</h3>
+            <h3 className="font-bold text-black mb-2">About VenStack</h3>
             <a href="#" className="text-gray-700 hover:text-black transition-colors">Careers</a>
             <a href="#" className="text-gray-700 hover:text-black transition-colors">Help and support</a>
             <a href="#" className="text-gray-700 hover:text-black transition-colors">Blog</a>

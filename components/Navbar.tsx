@@ -47,7 +47,7 @@ export default function Navbar() {
                 href="/authentication/signin"
                 className="hidden sm:block text-sm sm:text-base font-medium px-3 py-2 hover:bg-gray-200 rounded-2xl transition"
               >
-                Log in
+                Become a Vendor
               </a>
               {/* 
 

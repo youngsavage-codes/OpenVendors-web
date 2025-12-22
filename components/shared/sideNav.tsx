@@ -92,12 +92,12 @@ const IconSidebar = ({
             <button
               onClick={() => onSelect(item)}
               className={cn(
-                "w-10 h-10 flex items-center justify-center rounded-lg transition",
+                "w-12 h-12 flex items-center justify-center rounded-lg transition",
                 isActive ? "bg-[#1F363D]" : "hover:bg-gray-100"
               )}
             >
               <Icon
-                size={22}
+                size={30}
                 variant={isActive ? "Bold" : "Outline"}
                 color={isActive ? "#fff" : "#69787D"}
               />
