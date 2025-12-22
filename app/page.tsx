@@ -1,30 +1,30 @@
 'use client';
-import React from 'react'
-import Navbar from './components/Navbar'
-import Landingpage from './components/Landingpage'
-import Recomendedsection from './components/Recomendedsection';
-import Newtoopenvendor from './components/Newtoopenvendor/Newtoopenvendor'
-import Trending from './components/Trending';
-import Appadvertsection from './components/Appadvertsection';
-import Reviews from './components/Reviews';
-import Topratedsection from './components/Topratedsection';
-import Businesssection from './components/Businesssection';
-import Footer from './components/Footer';
+import Appadvertsection from '@/components/Appadvertsection';
+import Businesssection from '@/components/Businesssection';
+import Footer from '@/components/Footer';
+import Landingpage from '@/components/Landingpage';
+import Navbar from '@/components/Navbar';
+import Newtoopenvendor from '@/components/Newtoopenvendor/Newtoopenvendor';
+import Recomendedsection from '@/components/Recomendedsection';
+import Reviews from '@/components/Reviews';
+import Topratedsection from '@/components/Topratedsection';
+import Trending from '@/components/Trending';
+
 function page() {
   return (
     <div className='font-inter'>
       <Navbar />
-     <div className='rotating-gradient'>
+     <div className=''>
       <Landingpage />
-      <Recomendedsection/>
+      {/* <Recomendedsection/> */}
      </div>
-      <Newtoopenvendor/>
+      {/* <Newtoopenvendor/>
       <Trending/>
       <Appadvertsection/>
       <Reviews/>
       <Topratedsection/>
-      <Businesssection/>
-      <Footer/>
+      <Businesssection/> */}
+      {/* <Footer/> */}
     </div>
   )
 }
