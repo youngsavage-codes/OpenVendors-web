@@ -1,130 +1,194 @@
 "use client";
 
 import {
-  Card,
   Element3,
-  ArrowRight2,
-  ArrowLeft2,
-  Setting2,
-  Profile2User,
   Calendar,
-  People,
-  Bill,
   BookSaved,
+  People,
+  Setting2,
+  ArrowLeft2,
+  Profile2User,
   Tag,
 } from "iconsax-reactjs";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
+/* ---------------- NAV CONFIG ---------------- */
+
 const navItems = [
   {
-    href: "/portal",
+    href: "/portal/dashboard",
     icon: Element3,
     label: "Dashboard",
   },
   {
-    href: "/artist/dashboard/grid",
+    href: "/portal/calendar",
     icon: Calendar,
-    label: "Calender",
+    label: "Calendar",
   },
   {
-    href: "/artist/dashboard/grid",
-    icon: BookSaved,
-    label: "Catalog",
-  },
-  {
-    href: "/artist/dashboard/grid",
-    icon: People,
-    label: "Client",
-  },
-  {
-    href: "/artist/dashboard/design",
     icon: Tag,
     label: "Sales",
+    children: [
+      { href: "/portal/sales/daily-summery", label: "Daily Sales Summery" },
+      { href: "/portal/sales/appointments", label: "Appointments" },
+      { href: "/portal/sales/payments", label: "Payments" },
+    ],
   },
   {
-    href: "/artist/dashboard/billing",
+    icon: BookSaved,
+    label: "Catalog",
+    children: [
+      { href: "/portal/catalog/services", label: "Services" },
+      { href: "/portal/catalog/products", label: "Products" },
+    ],
+  },
+  {
+    icon: People,
+    label: "Clients",
+    children: [{ href: "/portal/clients/list", label: "Client List" }],
+  },
+  {
     icon: Profile2User,
     label: "Team",
+    children: [
+      { href: "/portal/team/members", label: "Team Members" },
+      { href: "/portal/team/shifts", label: "Scheduled Shifts" },
+    ],
   },
   {
-    href: "/artist/dashboard/billing",
     icon: Setting2,
     label: "Settings",
-  },
-  {
-    href: "/artist/dashboard/billing",
-    icon: Card,
-    label: "Payments",
+    children: [
+      { href: "/settings/profile", label: "Profile" },
+      { href: "/settings/business", label: "Business" },
+    ],
   },
 ];
 
-const SideNav = () => {
+/* ---------------- ICON SIDEBAR ---------------- */
+
+const IconSidebar = ({
+  onSelect,
+}: {
+  onSelect: (item: any) => void;
+}) => {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <aside className="w-20 h-screen border-r-2 border-[#E9EBEC] bg-white flex flex-col items-center py-6 gap-6 z-20">
+      {navItems.map((item) => {
+        const Icon = item.icon;
+
+        const isActive =
+          (item.href && pathname.startsWith(item.href)) ||
+          (item.children &&
+            item.children.some((child: any) =>
+              pathname.startsWith(child.href)
+            ));
+
+        return (
+          <button
+            key={item.label}
+            onClick={() => onSelect(item)}
+            className={cn(
+              "w-10 h-10 flex items-center justify-center rounded-lg transition",
+              isActive ? "bg-[#1F363D]" : "hover:bg-gray-100"
+            )}
+          >
+            <Icon
+              size={22}
+              variant={isActive ? "Bold" : "Outline"}
+              color={isActive ? "#fff" : "#69787D"}
+            />
+          </button>
+        );
+      })}
+    </aside>
+  );
+};
+
+/* ---------------- SUB MENU ---------------- */
+
+const SubMenuSidebar = ({
+  item,
+  onClose,
+}: {
+  item: any;
+  onClose: () => void;
+}) => {
+  const isOpen = !!item?.children;
 
   return (
     <aside
       className={cn(
-        "relative h-screen bg-white border-r-2 border-[#E9EBEC] flex flex-col py-6 transition-all duration-300",
-        expanded ? "w-55 px-4" : "w-20 px-2"
+        "absolute top-0 left-20 h-screen w-56 border-r-2 border-[#E9EBEC] bg-white",
+        "origin-left transform transition-all duration-300 ease-out",
+        isOpen
+          ? "scale-x-100 opacity-100"
+          : "scale-x-0 opacity-0 pointer-events-none"
       )}
     >
-      {/* Toggle Button (Right Edge) */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className={cn(
-          "absolute top-6 -right-4 z-50",
-          "w-8 h-8 rounded-full border-2 border-[#E9EBEC] bg-white shadow-sm",
-          "flex items-center justify-center",
-          "hover:bg-gray-100 transition"
-        )}
-      > 
-        {expanded ? <ArrowLeft2 size={16} /> : <ArrowRight2 size={16} />}
-      </button>
+      {item?.children && (
+        <div className="px-4 py-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4 relative">
+            <h3 className="font-semibold text-lg">{item.label}</h3>
 
-      {/* Navigation */}
-      <nav className="mt-12 flex flex-col gap-5 items-center">
-        {navItems.map(({ href, icon: Icon, label }) => {
-          const isActive = pathname === href;
-
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "rounded-lg transition-all",
-                expanded
-                  ? "flex items-center gap-3 px-3 py-2 w-full"
-                  : "flex items-center justify-center w-10 h-10",
-                isActive
-                  ? "bg-[#1F363D]"
-                  : "hover:bg-gray-100"
-              )}
+            <button
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-[#E9EBEC] hover:bg-gray-100 transition absolute -right-8 bg-white"
             >
-              <Icon
-                size={23}
-                variant={isActive ? "Bold" : "Outline"}
-                color={isActive ? "#FFFFFF" : "#69787D"}
-              />
+              <ArrowLeft2 size={18} color="#1F363D" />
+            </button>
+          </div>
 
-              {expanded && (
-                <span
-                  className={cn(
-                    "text-[18px] font-medium",
-                    isActive ? "text-white" : "text-[#69787D]"
-                  )}
-                >
-                  {label}
-                </span>
-              )}
-            </Link>
-          );
-        })}
-      </nav>
+          {/* Menu */}
+          <nav className="flex flex-col gap-2">
+            {item.children.map((child: any) => (
+              <Link
+                key={child.href}
+                href={child.href}
+                onClick={onClose} // <-- Close submenu on navigate
+                className="py-2 px-2 rounded-md text-sm text-gray-700 hover:bg-gray-100 transition"
+              >
+                {child.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </aside>
+  );
+};
+
+/* ---------------- MAIN ---------------- */
+
+const SideNav = () => {
+  const router = useRouter();
+  const [activeItem, setActiveItem] = useState<any>(null);
+
+  const handleSelect = (item: any) => {
+    if (item.href) {
+      router.push(item.href);
+      setActiveItem(null);
+      return;
+    }
+
+    setActiveItem(item);
+  };
+
+  return (
+    <div className="relative h-screen">
+      <IconSidebar onSelect={handleSelect} />
+
+      <SubMenuSidebar
+        item={activeItem}
+        onClose={() => setActiveItem(null)}
+      />
+    </div>
   );
 };
 

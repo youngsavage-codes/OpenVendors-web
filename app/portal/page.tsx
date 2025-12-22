@@ -1,9 +1,10 @@
+'use client'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-const DashboardPage = () => {
-  return (
-    <div>DashboardPage</div>
-  )
+const page = () => {
+    const router = useRouter()
+  return router.replace('/portal/dashboard')
 }
 
-export default DashboardPage
+export default page
