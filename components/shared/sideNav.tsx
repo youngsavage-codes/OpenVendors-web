@@ -61,10 +61,7 @@ const navItems = [
   {
     icon: Setting2,
     label: "Settings",
-    children: [
-      { href: "/settings/profile", label: "Profile" },
-      { href: "/settings/business", label: "Business" },
-    ],
+    href: "/portal/settings",
   },
 ];
 
@@ -90,20 +87,27 @@ const IconSidebar = ({
             ));
 
         return (
-          <button
-            key={item.label}
-            onClick={() => onSelect(item)}
-            className={cn(
-              "w-10 h-10 flex items-center justify-center rounded-lg transition",
-              isActive ? "bg-[#1F363D]" : "hover:bg-gray-100"
-            )}
-          >
-            <Icon
-              size={22}
-              variant={isActive ? "Bold" : "Outline"}
-              color={isActive ? "#fff" : "#69787D"}
-            />
-          </button>
+          <div key={item.label} className="relative group">
+            {/* Icon Button */}
+            <button
+              onClick={() => onSelect(item)}
+              className={cn(
+                "w-10 h-10 flex items-center justify-center rounded-lg transition",
+                isActive ? "bg-[#1F363D]" : "hover:bg-gray-100"
+              )}
+            >
+              <Icon
+                size={22}
+                variant={isActive ? "Bold" : "Outline"}
+                color={isActive ? "#fff" : "#69787D"}
+              />
+            </button>
+
+            {/* Tooltip */}
+            <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
+              {item.label}
+            </span>
+          </div>
         );
       })}
     </aside>
@@ -151,7 +155,7 @@ const SubMenuSidebar = ({
               <Link
                 key={child.href}
                 href={child.href}
-                onClick={onClose} // <-- Close submenu on navigate
+                onClick={onClose} // Close submenu on navigate
                 className="py-2 px-2 rounded-md text-sm text-gray-700 hover:bg-gray-100 transition"
               >
                 {child.label}
