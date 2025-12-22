@@ -1,5 +1,7 @@
 import React from 'react';
 import { Apple, Globe } from 'lucide-react';
+import Image from 'next/image';
+import { images } from '@/constant/images';
 
 const Footer: React.FC = () => {
   return (
@@ -9,7 +11,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 justify-center gap-6 lg:gap-12">
           {/* Logo and App Download */}
           <div className="flex flex-col gap-6 items-start">
-            <h2 className="text-3xl font-bold text-black">Open vendor</h2>
+            <a href="#" className="text-xl sm:text-2xl md:text-3xl font-bold text-black">
+              <Image src={images.logoBlack} width={100} height={100} alt='logo' />
+            </a>
             
             <button className=" bg-white px-6 py-3 border border-gray-300 rounded-full flex items-center gap-2 text-base font-medium hover:bg-gray-50 transition-colors w-fit">
               Get the app

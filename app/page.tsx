@@ -24,7 +24,7 @@ function page() {
       <Reviews/>
       <Topratedsection/>
       <Businesssection/> */}
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   )
 }

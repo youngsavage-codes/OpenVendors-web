@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -12,35 +12,36 @@ import {
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 
-interface CountryCode {
-  label: string;
-  value: string;
-}
-
-interface PhoneInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PhoneInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  countryCodes?: CountryCode[];
+  countryCodes?: Record<string, string>; // now an object
   defaultCode?: string;
   style?: any;
 }
 
-const defaultCountryCodes: CountryCode[] = [
-  { label: "+1", value: "+1" },
-  { label: "+44", value: "+44" },
-  { label: "+234", value: "+234" },
-  { label: "+91", value: "+91" },
-];
-
 const PhoneInput = ({
   label,
-  countryCodes = defaultCountryCodes,
+  countryCodes,
   defaultCode = "+234",
   style,
   className,
   ...props
 }: PhoneInputProps) => {
   const [selectedCode, setSelectedCode] = useState(defaultCode);
+
+  // Convert object into array for Select, keeping key for uniqueness
+  const countryArray = useMemo(
+    () =>
+      Object.entries(countryCodes || {}).map(([key, label]) => {
+        const codeMatch = label.match(/\+\d+/); // extract code like +234
+        return {
+          key, // use country code (AD, AE, etc.) as key
+          label,
+          value: codeMatch ? codeMatch[0] : "",
+        };
+      }),
+    [countryCodes]
+  );
 
   return (
     <div className={`${style} mb-4`}>
@@ -55,7 +56,7 @@ const PhoneInput = ({
         <Select value={selectedCode} onValueChange={setSelectedCode}>
           <SelectTrigger
             className={cn(
-              "h-12 px-3 border-none shadow-none rounded-none bg-white text-[14px] font-normal text-[#0F172A]",
+              "h-12 px-3 border-none shadow-none outline-none rounded-none bg-white text-[14px] font-normal text-[#0F172A]",
               "focus:outline-none flex items-center"
             )}
           >
@@ -63,9 +64,9 @@ const PhoneInput = ({
           </SelectTrigger>
 
           <SelectContent className="rounded-none border-none">
-            {countryCodes.map((code) => (
+            {countryArray.map((code) => (
               <SelectItem
-                key={code.value}
+                key={code.key} // <-- use unique country code
                 value={code.value}
                 className="text-[14px] h-10 flex items-center"
               >

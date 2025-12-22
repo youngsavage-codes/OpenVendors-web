@@ -1,44 +1,57 @@
-'use client'
+"use client";
 
-import React, { Suspense, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import React, { Suspense, useState, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import CustomButton from '@/components/shared/button'
-import CustomCheckbox from '@/components/shared/checkbox'
-import CustomInput from '@/components/shared/input'
-import PasswordInput from '@/components/shared/passwordInput'
-import PhoneInput from '@/components/shared/phoneNumberInput'
-import CustomSelect from '@/components/shared/select'
+import CustomButton from "@/components/shared/button";
+import CustomCheckbox from "@/components/shared/checkbox";
+import CustomInput from "@/components/shared/input";
+import PasswordInput from "@/components/shared/passwordInput";
+import PhoneInput from "@/components/shared/phoneNumberInput";
+import CustomSelect from "@/components/shared/select";
+import * as countryCodes from "country-codes-list";
 
 const SignUpContent = () => {
-  const router = useRouter()
-  const params = useSearchParams()
+  const router = useRouter();
+  const params = useSearchParams();
 
-  const [loading, setLoading] = useState(false)
-  const [agreed, setAgreed] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
-  const email = params.get('email')
+  const email = params.get("email");
 
-  const countryOptions = [
-    { label: 'Nigeria', value: 'ng' },
-    { label: 'Ghana', value: 'gh' },
-    { label: 'Kenya', value: 'ke' },
-  ]
+  // Get country codes for PhoneInput
+  const myCountryCodesObject = countryCodes.customList(
+    "countryCode",
+    "{countryCode} +{countryCallingCode}"
+  );
+
+  // Get country names for CustomSelect
+  const myCountryObject = countryCodes.customList("countryCode", "{countryNameEn}");
+
+  // Convert object into array for select
+  const countryArray = useMemo(
+    () =>
+      Object.entries(myCountryObject || {}).map(([code, name]) => ({
+        label: name,
+        value: code, // Use country code (AD, NG, etc.) as value
+      })),
+    [myCountryObject]
+  );
 
   const handleSignup = () => {
-    setLoading(true)
-
+    setLoading(true);
     setTimeout(() => {
-      router.replace('/authentication/account-type')
-    }, 5000)
-  }
+      router.replace("/authentication/account-type");
+    }, 5000);
+  };
 
   return (
     <div className="w-full lg:w-2/3">
       <div className="text-center mb-5 space-y-3">
         <h1 className="font-bold text-2xl">Create a professional account</h1>
         <p className="text-lg text-gray-600">
-          You're almost there! Create your new account for{' '}
+          You're almost there! Create your new account for{" "}
           <span className="font-semibold">{email}</span> by completing these details.
         </p>
       </div>
@@ -59,6 +72,7 @@ const SignUpContent = () => {
         />
 
         <PhoneInput
+          countryCodes={myCountryCodesObject}
           label="Phone Number"
           placeholder="Enter phone number"
         />
@@ -66,8 +80,8 @@ const SignUpContent = () => {
         <CustomSelect
           label="Country"
           placeholder="Select your country"
-          options={countryOptions}
-          onValueChange={(value) => console.log(value)}
+          options={countryArray} // ✅ Pass the properly formatted array
+          onValueChange={(value) => console.log("Selected country:", value)}
           style="w-full"
         />
 
@@ -97,15 +111,15 @@ const SignUpContent = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const SignUpPage = () => {
   return (
     <Suspense fallback={<div className="text-center py-20">Loading...</div>}>
       <SignUpContent />
     </Suspense>
-  )
-}
+  );
+};
 
-export default SignUpPage
+export default SignUpPage;
