@@ -42,11 +42,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div>
-      <div>
+      <div className="max-h-screen">
         {children}
       </div>
-    </div>
   );
 };
 

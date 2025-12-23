@@ -1,11 +1,8 @@
-'use client'
+"use client";
 
 import Header from "@/components/shared/header";
 import SideNav from "@/components/shared/sideNav";
-import { UserService } from "@/services/user.service";
-import { useUserStore } from "@/store/useUserStore";
-import { Loader } from "lucide-react";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,12 +10,20 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <div className="max-h-screen overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden">
+      {/* Header */}
       <Header />
-      <div className="flex overflow-hidden">
+
+      {/* Main content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
         <SideNav />
-        <div className="bg-white max-h-screen overflow-y-auto w-full">
-          <div className="flex-1 flex flex-col p-5">{children}</div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-5 min-h-full">
+            {children}
+          </div>
         </div>
       </div>
     </div>
