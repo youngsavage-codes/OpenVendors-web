@@ -2,6 +2,7 @@ import React from 'react';
 import { Apple, Globe } from 'lucide-react';
 import Image from 'next/image';
 import { images } from '@/constant/images';
+import { Android } from 'iconsax-reactjs';
 
 const Footer: React.FC = () => {
   return (
@@ -17,8 +18,8 @@ const Footer: React.FC = () => {
             
             <button className=" bg-white px-6 py-3 border border-gray-300 rounded-full flex items-center gap-2 text-base font-medium hover:bg-gray-50 transition-colors w-fit">
               Get the app
-              <Apple className="w-5 h-5" />
-              <Globe className="w-5 h-5" />
+              {/* <Apple className="w-5 h-5" /> */}
+              <Android size={30} className="w-7 h-7" />
             </button>
           </div>
 

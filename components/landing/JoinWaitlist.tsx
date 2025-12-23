@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Loader2, Mail } from 'lucide-react';
+import { Loader, Mail } from 'lucide-react';
+import { WaitlistService } from '@/services/waitlist.service';
+import { toast } from 'react-toastify';
+import { useToastStore } from '@/store/useToastStore';
 
 interface JoinWaitlistProps {
   title?: string;
@@ -19,17 +22,22 @@ const JoinWaitlist: React.FC<JoinWaitlistProps> = ({
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  // ✅ Zustand toast store
+  const showToast = useToastStore((state) => state.showToast);
 
   const handleSubmit = async () => {
     if (!email) return;
 
     try {
       setLoading(true);
-      await onSubmit?.(email);
-      setSuccess(true);
-      setEmail('');
-    } catch (err) {
-      console.error(err);
+      const res = await WaitlistService.joinwaitlist(email);
+      if(res) {
+        showToast(res.message, "success"); // ✅ use custom toast
+        setSuccess(true);
+        setEmail('');
+      }
+    } catch (err: any) {
+      showToast(err?.response?.data?.message || "Something went wrong", "error"); // ✅ error toast
     } finally {
       setLoading(false);
     }
@@ -72,7 +80,7 @@ const JoinWaitlist: React.FC<JoinWaitlistProps> = ({
             disabled={loading}
             className="rounded-full bg-black text-white px-6 py-3 text-sm sm:text-base font-medium hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70"
           >
-            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading && <Loader className="w-4 h-4 animate-spin" />}
             {buttonText}
           </button>
         </div>

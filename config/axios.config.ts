@@ -74,20 +74,26 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = TokenService.getRefreshToken()
+        const accessToken = TokenService.getAccessToken();
+        const isTokenExpired = TokenService.isTokenExpired(accessToken!)
+
+        if(accessToken && isTokenExpired) {
+          
+           const refreshToken = TokenService.getRefreshToken()
         // Backend refreshes cookie / token
-        const res = await post('/auth/refresh', {
-          refreshToken
-        });
+          const res = await post('/auth/refresh', {
+            refreshToken
+          });
 
-        const newAccessToken = TokenService.setAccessToken('');
-        TokenService.setRefreshToken('');
+          const newAccessToken = TokenService.setAccessToken('');
+          TokenService.setRefreshToken('');
 
-        api.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
-        processQueue(null, newAccessToken!);
+          api.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+          processQueue(null, newAccessToken!);
 
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return api(originalRequest);
+        }
       } catch (err) {
         processQueue(err, null);
         TokenService.clearTokens();

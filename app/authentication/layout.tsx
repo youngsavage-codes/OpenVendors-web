@@ -23,7 +23,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
       </div>
 
       {/* Right side – auth pages */}
-      <div className="overflow-y-auto flex flex-col items-center justify-center w-full p-6">
+      <div className="overflow-y-auto flex flex-col items-center justify-center w-full p-6 relative">
         {children}
       </div>
 

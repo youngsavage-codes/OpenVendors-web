@@ -33,7 +33,7 @@ const Step1: React.FC = () => {
       <CustomInput
         placeholder="Find a business in Nigeria"
         type="text"
-        style="w-full"
+        className="w-full"
         onChange={(e) => setSearch(e.target.value)}
       />
 

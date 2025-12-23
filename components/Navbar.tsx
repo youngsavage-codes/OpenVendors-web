@@ -77,7 +77,7 @@ export default function Navbar() {
         <div className='hidden sm:block bg-white shadow-2xl py-4 fixed gap-2 top-20 z-50 right-20 flex-col rounded-xl w-72 animate-in fade-in slide-in-from-top-2 duration-200'>
           <p className='font-bold text-lg px-4 py-2'>For customers</p>
           
-          <a href="" className='flex items-center justify-between text-blue-600 text-base hover:bg-gray-100 rounded-lg px-4 py-3 mx-2 transition-all duration-200'>
+          <a href="/authentication/signin" className='flex items-center justify-between text-blue-600 text-base hover:bg-gray-100 rounded-lg px-4 py-3 mx-2 transition-all duration-200'>
             Log in or sign up
             <ArrowRight className="w-4 h-4" />
           </a>
@@ -101,7 +101,7 @@ export default function Navbar() {
           </a>
           
           <div className='my-2 mx-2'>
-            <a href="http://" className='flex items-center justify-between font-semibold text-gray-900 text-base rounded-lg hover:bg-gray-100 px-4 py-3 transition-all duration-200 border border-gray-200'>
+            <a href="/authentication/signin" className='flex items-center justify-between font-semibold text-gray-900 text-base rounded-lg hover:bg-gray-100 px-4 py-3 transition-all duration-200 border border-gray-200'>
               For businesses
               <ArrowRight className="w-5 h-5" />
             </a>
@@ -129,7 +129,7 @@ export default function Navbar() {
               <div className='bg-white rounded-2xl p-4 mb-4'>
                 <p className='font-bold text-lg mb-4'>For customers</p>
                 
-                <a href="" className='flex items-center justify-between text-blue-600 text-base py-4 border-b border-gray-100'>
+                <a href="/authentication/signin" className='flex items-center justify-between text-blue-600 text-base py-4 border-b border-gray-100'>
                   Log in or sign up
                   <ArrowRight className="w-5 h-5" />
                 </a>
@@ -154,7 +154,7 @@ export default function Navbar() {
               </div>
 
               <div className='bg-white rounded-2xl p-4'>
-                <a href="http://" className='flex items-center justify-between font-semibold text-gray-900 text-base py-3'>
+                <a href="/authentication/signin" className='flex items-center justify-between font-semibold text-gray-900 text-base py-3'>
                   For businesses
                   <ArrowRight className="w-5 h-5" />
                 </a>

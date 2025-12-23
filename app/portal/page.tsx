@@ -4,7 +4,7 @@ import React from 'react'
 
 const page = () => {
     const router = useRouter()
-  return router.replace('/portal/dashboard')
+  return router.replace('/portal/vendor/dashboard')
 }
 
 export default page

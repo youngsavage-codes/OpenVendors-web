@@ -43,11 +43,19 @@ export const signUpSchema = yup.object({
   firstName: nameField("First name"),
   lastName: nameField("Last name"),
   phone: phoneField,
+
+  isAgreed: yup
+    .boolean()
+    .oneOf([true], "You must agree to the Terms & Privacy Policy"),
 });
 
-export const loginSchema = yup.object({
+
+export const verifyLoginEmailSchema = yup.object({
   email: emailField,
-  password: yup.string().required("Password is required"),
+});
+
+export const verifyLoginPasswordSchema = yup.object({
+  password: strongPasswordField,
 });
 
 export const forgotPasswordSchema = yup.object({

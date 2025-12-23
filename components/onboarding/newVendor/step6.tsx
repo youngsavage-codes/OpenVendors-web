@@ -66,7 +66,7 @@ const Step6: React.FC = () => {
           value={address}
           onChange={(e) => handleChange(e.target.value)}
           type="text"
-          style="w-full"
+          className="w-full"
         />
         <button
           type="button"

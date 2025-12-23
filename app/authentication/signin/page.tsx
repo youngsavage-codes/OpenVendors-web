@@ -1,68 +1,118 @@
-'use client'
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
+
 import AuthPrompt from '@/components/shared/authPrompt';
 import CustomButton from '@/components/shared/button';
-import CustomInput from '@/components/shared/input'
+import CustomInput from '@/components/shared/input';
 import SocialAuth from '@/components/shared/socialAuth';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+
+import { AuthService } from '@/services/auth.services';
+import { verifyLoginEmailSchema } from '@/schema/authSchema';
+import { useEmailStore } from '@/store/useEmailStore';
+
+type SignInFormValues = {
+  email: string;
+};
 
 const SignInPage = () => {
-    const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [accountExist, setAccountExist] = useState(false)
-    const [loading, setLoading] = useState(false);
-    const handleGoogle = () => {
-        console.log("Login with Google");
-    };
+  const router = useRouter();
+  const setEmail = useEmailStore((state) => state.setEmail);
 
-    const handleApple = () => {
-        console.log("Login with Apple");
-    };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<SignInFormValues>({
+    resolver: yupResolver(verifyLoginEmailSchema),
+    mode: 'onChange', // ✅ validate while typing
+    reValidateMode: 'onChange',
+  });
 
-    const handleLogin = () => {
-      try {
-        setLoading(true)
+  const handleGoogle = () => {
+    console.log('Login with Google');
+  };
 
-        setTimeout(() => {
-          if(!accountExist) {
-            router.replace(`/authentication/signup?email=${email}`)
-          } else {
-            return
-          }
-        }, 5000)
-      } catch(error: any) {
+  const handleApple = () => {
+    console.log('Login with Apple');
+  };
 
-      } finally {
-        
+  const onSubmit = async ({ email }: SignInFormValues) => {
+    try {
+      const res = await AuthService.verifyEmail(email);
+
+      setEmail(email);
+
+      if (res?.data?.exists) {
+        router.replace(
+          `/authentication/signin/password`
+        );
+      } else {
+        router.replace(
+          `/authentication/signup`
+        );
       }
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message || 'Something went wrong'
+      );
     }
+  };
+
   return (
-    <div className='w-full lg:w-2/3'>
-      <div className='text-center mb-5 space-y-3'>
-        <h1 className='font-bold text-2xl'>VenStack for professionals</h1>
-        <p className='text-lg text-gray-600'>Create an account or log in to manage your business.</p>
+    <div className="w-full lg:w-2/3">
+      {/* Header */}
+      <div className="text-center mb-6 space-y-3">
+        <h1 className="font-bold text-2xl">VenStack for professionals</h1>
+        <p className="text-lg text-gray-600">
+          Create an account or log in to manage your business.
+        </p>
       </div>
-      <div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <CustomInput
           label="Email"
-          placeholder="Email Address"
-          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email address"
           type="email"
-          style='w-full'
+          {...register('email')}
+          error={errors.email?.message}
         />
-        <CustomButton onClick={handleLogin} isLoading={loading} className='w-full mt-5'>
+
+        <CustomButton
+          type="submit"
+          isLoading={isSubmitting}
+          disabled={!isValid}
+          className="w-full mt-5"
+        >
           Continue
         </CustomButton>
-        <SocialAuth onGoogleClick={handleGoogle} onAppleClick={handleApple} />
-      </div>
-      <div className='mt-5'>
-        <AuthPrompt message='Are you a customer looking to book an appointment?' linkText='Go to VenStack for customers' />
-        <p className='text-gray-500 text-center mt-20 text-sm'>
-          This site is protected by reCAPTCHA Google Privacy Policy and Terms of Service apply
+      </form>
+
+      {/* Social Auth */}
+      <SocialAuth
+        onGoogleClick={handleGoogle}
+        onAppleClick={handleApple}
+      />
+
+      {/* Footer */}
+      <div className="mt-6">
+        <AuthPrompt
+          message="Are you a customer looking to book an appointment?"
+          linkText="Go to VenStack for customers"
+        />
+
+        <p className="text-gray-500 text-center mt-16 text-sm">
+          This site is protected by reCAPTCHA and the Google Privacy Policy
+          and Terms of Service apply.
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignInPage
+export default SignInPage;

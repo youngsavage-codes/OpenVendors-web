@@ -19,12 +19,12 @@ import { useState } from "react";
 
 const navItems = [
   {
-    href: "/portal/dashboard",
+    href: "/portal/vendor/dashboard",
     icon: Element3,
     label: "Dashboard",
   },
   {
-    href: "/portal/calendar",
+    href: "/portal/vendor/calendar",
     icon: Calendar,
     label: "Calendar",
   },
@@ -32,36 +32,37 @@ const navItems = [
     icon: Tag,
     label: "Sales",
     children: [
-      { href: "/portal/sales/daily-summery", label: "Daily Sales Summery" },
-      { href: "/portal/sales/appointments", label: "Appointments" },
-      { href: "/portal/sales/payments", label: "Payments" },
+      { href: "/portal/vendor/sales/daily-summery", label: "Daily Sales Summery" },
+      { href: "/portal/vendor/sales/appointments", label: "Appointments" },
+      { href: "/portal/vendor/sales/payments", label: "Payments" },
     ],
   },
   {
     icon: BookSaved,
     label: "Catalog",
     children: [
-      { href: "/portal/catalog/services", label: "Services" },
-      { href: "/portal/catalog/products", label: "Products" },
+      { href: "/portal/vendor/catalog/categories", label: "Categories" },
+      { href: "/portal/vendor/catalog/services", label: "Services" },
+      { href: "/portal/vendor/catalog/products", label: "Products" },
     ],
   },
   {
     icon: People,
     label: "Clients",
-    children: [{ href: "/portal/clients/list", label: "Client List" }],
+    children: [{ href: "/portal/vendor/clients/list", label: "Client List" }],
   },
   {
     icon: Profile2User,
     label: "Team",
     children: [
-      { href: "/portal/team/members", label: "Team Members" },
-      { href: "/portal/team/shifts", label: "Scheduled Shifts" },
+      { href: "/portal/vendor/team/members", label: "Team Members" },
+      { href: "/portal/vendor/team/shifts", label: "Scheduled Shifts" },
     ],
   },
   {
     icon: Setting2,
     label: "Settings",
-    href: "/portal/settings",
+    href: "/portal/vendor/settings",
   },
 ];
 

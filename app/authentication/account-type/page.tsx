@@ -16,9 +16,9 @@ const AccountTypePage: React.FC = () => {
     setTimeout(() => {
       setLoading(false)
       if(type === 'new') {
-        router.replace(`/onboarding/createBusiness`)
+        router.replace(`/portal/onboarding/createBusiness`)
       }else if(type === 'existing') {
-        router.replace(`/onboarding/joinBusiness`)
+        router.replace(`/portal/onboarding/joinBusiness`)
       }
     }, 2000)
   }

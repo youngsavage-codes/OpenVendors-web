@@ -51,7 +51,7 @@
 
 // export default Appadvertsection
 import React from 'react';
-import { QrCode, AppleIcon, Globe, Apple } from 'lucide-react';
+import { AppleIcon, Globe } from 'lucide-react';
 import Image from 'next/image';
 import { images } from '@/constant/images';
 

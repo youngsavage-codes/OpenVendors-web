@@ -7,12 +7,14 @@ interface CustomTextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   style?: any;
+  error?: string;
 }
 
 const CustomTextArea = ({
   label,
   className,
   style,
+  error,
   ...props
 }: CustomTextAreaProps) => {
   return (
@@ -26,12 +28,20 @@ const CustomTextArea = ({
       <Textarea
         {...props}
         className={cn(
-          "border-2 border-[#E9EBEC] min-h-[140px] resize-none",
-          "placeholder:text-[#69787D] placeholder:text-[16px] placeholder:font-medium font-medium text-[14px]",
-          "rounded-sm shadow-none focus-visible:ring-0",
+          "min-h-[140px] resize-none rounded-sm shadow-none focus-visible:ring-0 border-2",
+          error ? "border-red-500" : "border-[#E9EBEC]",
+          "placeholder:text-[#69787D] placeholder:text-[16px] placeholder:font-medium",
+          "font-medium text-[14px]",
           className
         )}
       />
+
+      {/* Error Message */}
+      {error && (
+        <p className="mt-1 text-sm text-red-500 font-medium">
+          {error}
+        </p>
+      )}
     </div>
   );
 };

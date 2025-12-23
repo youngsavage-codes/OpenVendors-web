@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState, useMemo } from "react";
+import React, { Suspense, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import CustomButton from "@/components/shared/button";
@@ -11,39 +11,103 @@ import PhoneInput from "@/components/shared/phoneNumberInput";
 import CustomSelect from "@/components/shared/select";
 import * as countryCodes from "country-codes-list";
 
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signUpSchema } from "@/schema/authSchema";
+import { AuthService } from "@/services/auth.services";
+import { toast } from "react-toastify";
+import { useEmailStore } from "@/store/useEmailStore";
+import { useToastStore } from "@/store/useToastStore";
+
+interface SignUpFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+  country: string;
+  isAgreed: boolean;
+}
+
 const SignUpContent = () => {
   const router = useRouter();
-  const params = useSearchParams();
+  const { email, hasHydrated } = useEmailStore();
+  // ✅ Zustand toast store
+  const showToast = useToastStore((state) => state.showToast);
 
-  const [loading, setLoading] = useState(false);
-  const [agreed, setAgreed] = useState(false);
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<SignUpFormValues>({
+    resolver: yupResolver(signUpSchema as any),
+    mode: "onChange",
+    defaultValues: {
+      email,
+      firstName: "",
+      lastName: "",
+      phone: "",
+      password: "",
+      country: "",
+      isAgreed: false,
+    },
+  });
 
-  const email = params.get("email");
+  useEffect(() => {
+    if (!hasHydrated) return;
+  
+    if (!email) {
+      router.replace("/authentication/signin");
+    }
+  }, [hasHydrated, email, router]);
+  
+  
+  if (!hasHydrated) return null;
+  if (!email) return null;
 
-  // Get country codes for PhoneInput
+  // Country codes for PhoneInput
   const myCountryCodesObject = countryCodes.customList(
     "countryCode",
     "{countryCode} +{countryCallingCode}"
   );
 
-  // Get country names for CustomSelect
-  const myCountryObject = countryCodes.customList("countryCode", "{countryNameEn}");
+  // Country names for CustomSelect
+  const myCountryObject = countryCodes.customList(
+    "countryCode",
+    "{countryNameEn}"
+  );
 
-  // Convert object into array for select
   const countryArray = useMemo(
     () =>
       Object.entries(myCountryObject || {}).map(([code, name]) => ({
         label: name,
-        value: code, // Use country code (AD, NG, etc.) as value
+        value: code,
       })),
     [myCountryObject]
   );
 
-  const handleSignup = () => {
-    setLoading(true);
-    setTimeout(() => {
-      router.replace("/authentication/account-type");
-    }, 5000);
+  const onSubmit = async (data: SignUpFormValues) => {
+    const payload: any = {
+      email: data.email,
+      password: data.password,
+      firstName: data?.firstName,
+      lastName: data.lastName,
+      phone: data?.phone,
+      country: data.country,
+      role: "user"
+    }
+    
+    try {
+      const res = await AuthService.registerApi(payload);
+      if(res.success) {
+        // Here you can call your API to register the user
+        showToast(res.message, "success"); // ✅ use custom toast
+        router.replace("/authentication/account-type");
+      }
+    } catch(error: any) {
+      showToast(error?.response?.data?.message || "Something went wrong", "error"); // ✅ error toast
+    }
   };
 
   return (
@@ -52,64 +116,105 @@ const SignUpContent = () => {
         <h1 className="font-bold text-2xl">Create a professional account</h1>
         <p className="text-lg text-gray-600">
           You're almost there! Create your new account for{" "}
-          <span className="font-semibold">{email}</span> by completing these details.
+          <span className="font-semibold">{email}</span> by completing these
+          details.
         </p>
       </div>
 
-      <div className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit as any)}>
         <CustomInput
           label="First name"
           placeholder="Enter your first name"
-          type="text"
-          style="w-full"
+          {...register("firstName")}
+          className="w-full"
+          error={errors.firstName?.message}
         />
 
         <CustomInput
           label="Last name"
           placeholder="Enter your last name"
-          type="text"
-          style="w-full"
+          {...register("lastName")}
+          className="w-full"
+          error={errors.lastName?.message}
         />
 
-        <PhoneInput
-          countryCodes={myCountryCodesObject}
-          label="Phone Number"
-          placeholder="Enter phone number"
+
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field }) => (
+            <PhoneInput
+              label="Phone Number"
+              placeholder="Enter phone number"
+              countryCodes={myCountryCodesObject}
+              value={field.value}
+              onChange={field.onChange} // <--- THIS IS KEY
+              error={errors.phone?.message}
+            />
+          )}
         />
 
-        <CustomSelect
-          label="Country"
-          placeholder="Select your country"
-          options={countryArray} // ✅ Pass the properly formatted array
-          onValueChange={(value) => console.log("Selected country:", value)}
-          style="w-full"
+
+
+        <Controller
+          control={control}
+          name="country"
+          render={({ field }) => (
+            <CustomSelect
+              label="Country"
+              placeholder="Select your country"
+              options={countryArray}
+              value={field.value}
+              onValueChange={field.onChange}
+              className={errors.country ? "border-red-500" : ""}
+              error={errors.country?.message}
+            />
+          )}
         />
 
-        <PasswordInput
-          label="Password"
-          placeholder="Enter your password"
+        <Controller
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              value={field.value}
+              onChange={field.onChange} // ensures validation triggers
+              error={errors.password?.message}
+            />
+          )}
         />
-
-        <CustomCheckbox
-          id="terms"
-          label="I agree to the Terms of Service and Privacy Policy"
-          checked={agreed}
-          onCheckedChange={setAgreed}
+        <Controller
+          control={control}
+          name="isAgreed"
+          render={({ field }) => (
+            <CustomCheckbox
+              id="terms"
+              label="I agree to the Terms of Service and Privacy Policy"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
         />
+        {errors.isAgreed && (
+          <p className="text-red-500 text-sm">{errors.isAgreed.message}</p>
+        )}
 
         <CustomButton
-          onClick={handleSignup}
-          isLoading={loading}
+          type="submit"
           className="w-full mt-5"
-          disabled={!agreed}
+          isLoading={isSubmitting}
+          disabled={!isValid}
         >
           Create Account
         </CustomButton>
 
         <p className="text-gray-500 text-center mt-10 text-sm">
-          This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.
+          This site is protected by reCAPTCHA and the Google Privacy Policy and
+          Terms of Service apply.
         </p>
-      </div>
+      </form>
     </div>
   );
 };
