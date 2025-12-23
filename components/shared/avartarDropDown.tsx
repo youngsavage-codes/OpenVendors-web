@@ -55,13 +55,17 @@ const AvatarDropDown = () => {
           </div>
 
           {/* Email Verification Banner */}
-          <div className="my-5 bg-red-800 border-2 border-red-600 p-5 text-white rounded-xl flex items-center justify-between">
-            <div>
-              <h4 className="text-base font-semibold">Verify your email account</h4>
-              <p className="text-sm text-white">Secure your account</p>
-            </div>
-            <ArrowRight2 />
-          </div>
+          {
+            !user.emailVerified && (
+              <div className="mb-3 mt-3 bg-red-800 border-2 border-red-600 p-5 text-white rounded-xl flex items-center justify-between">
+                <div>
+                  <h4 className="text-base font-semibold">Verify your email account</h4>
+                  <p className="text-sm text-white">Secure your account</p>
+                </div>
+                <ArrowRight2 />
+              </div>
+            )
+          }
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />

@@ -43,7 +43,6 @@ export const signUpSchema = yup.object({
   firstName: nameField("First name"),
   lastName: nameField("Last name"),
   phone: phoneField,
-
   isAgreed: yup
     .boolean()
     .oneOf([true], "You must agree to the Terms & Privacy Policy"),
@@ -64,9 +63,14 @@ export const forgotPasswordSchema = yup.object({
 
 export const resetPasswordSchema = yup.object({
   email: emailField,
-  otp: otpField,
   newPassword: strongPasswordField.label("New password"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm password is required")
+    .oneOf([yup.ref("newPassword")], "Passwords must match")
+    .label("Confirm password"),
 });
+
 
 export const verifyEmailSchema = yup.object({
   email: emailField,

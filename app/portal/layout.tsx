@@ -42,13 +42,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="max-h-screen overflow-hidden">
-      <Header />
-      <div className="flex overflow-hidden">
-        <SideNav />
-        <div className="bg-white max-h-screen overflow-y-auto w-full">
-          <div className="flex-1 flex flex-col p-5">{children}</div>
-        </div>
+    <div>
+      <div>
+        {children}
       </div>
     </div>
   );

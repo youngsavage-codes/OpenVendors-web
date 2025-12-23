@@ -20,5 +20,11 @@ export const AuthService = {
     },
     async verifyEmailOtpApi(email: string, otp: string) {
         return await post('/auth/email/verify', {email, otp})
+    },
+    async forgotPasswordApi(email: string) {
+        return await post('/auth/password/forgot', {email})
+    },
+    async resetPasswordApi(email: string, newPassword: string) {
+        return await post('/auth/password/reset', {email, newPassword})
     }
 }

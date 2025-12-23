@@ -86,7 +86,7 @@ const SigninPasswordpage = () => {
 
           <Link
             className="text-sm text-primary"
-            href={`/authentication/forgotpassword?email=${email}`}
+            href={`/authentication/forgotpassword`}
           >
             Forgot your password?
           </Link>
