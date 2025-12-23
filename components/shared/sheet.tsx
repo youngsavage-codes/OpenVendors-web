@@ -92,8 +92,6 @@ const CustomSheet = ({ open, onOpen, client, booking, appId }: CustomSheetProps)
 
   return (
     <Sheet open={open} onOpenChange={onOpen}>
-      <SheetTrigger>Open</SheetTrigger>
-
       <SheetContent className="sm:max-w-[1000px] p-0 flex flex-col h-full">
 
         <div className="grid grid-cols-12 flex-1 overflow-y-auto">
