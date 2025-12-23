@@ -52,8 +52,6 @@ const formatDuration = (totalMins: number) => {
 
 const CustomSheet = ({ open, onOpen, client, booking, appId }: CustomSheetProps) => {
 
-  console.log(appId)
-
   const defaultClient = {
     name: "John Doe",
     email: "john@example.com",
