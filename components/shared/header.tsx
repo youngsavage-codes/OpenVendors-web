@@ -3,6 +3,7 @@ import { ArrowRight2, Chart, Notification, SearchNormal } from 'iconsax-reactjs'
 import Image from 'next/image'
 import AvartarDropDown from './avartarDropDown';
 import NotificationSheet from '../sheets/notificationSheet';
+import SearchDrawer from '../searchDrawer';
 
 
 const Header = () => {
@@ -15,7 +16,7 @@ const Header = () => {
                     <h5 className='font-semibold'>Continue Setup</h5>
                     <ArrowRight2 />
                 </button>
-                <SearchNormal size={30} />
+                <SearchDrawer />
                 <Chart size={30} />
                 <NotificationSheet />
                 <AvartarDropDown />
