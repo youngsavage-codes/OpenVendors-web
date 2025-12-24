@@ -129,7 +129,7 @@ const SubMenuSidebar = ({
   return (
     <aside
       className={cn(
-        "absolute top-0 left-20 h-screen w-56 border-r-2 border-[#E9EBEC] bg-white",
+        "absolute top-0 left-20 h-screen w-56 border-r-2 border-[#E9EBEC] bg-white z-20",
         "origin-left transform transition-all duration-300 ease-out",
         isOpen
           ? "scale-x-100 opacity-100"
