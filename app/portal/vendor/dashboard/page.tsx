@@ -4,7 +4,7 @@ import AppointmentActivities from '@/components/dashboard/appointmentActivities'
 import RecentTransactions from '@/components/dashboard/recentTransactions'
 import TopServices from '@/components/dashboard/topServices'
 import UpcomingAppointments from '@/components/dashboard/upcomingAppointments'
-import CustomSheet from '@/components/shared/sheet'
+import BookingSheet from '@/components/sheets/bookingSheet'
 import { useState } from 'react'
 
 const DashboardPage = () => {
@@ -20,11 +20,7 @@ const DashboardPage = () => {
         <RecentTransactions />
       </div>
 
-      {/* <button onClick={() => setOpenSheet(true)}>
-        open
-      </button> */}
-
-      <CustomSheet open={openSheet} onOpen={setOpenSheet} appId={appId} />
+      <BookingSheet open={openSheet} onOpen={setOpenSheet} appId={appId} />
     </div>
   )
 }

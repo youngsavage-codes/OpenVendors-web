@@ -2,6 +2,7 @@ import { images } from '@/constant/images'
 import { ArrowRight2, Chart, Notification, SearchNormal } from 'iconsax-reactjs'
 import Image from 'next/image'
 import AvartarDropDown from './avartarDropDown';
+import NotificationSheet from '../sheets/notificationSheet';
 
 
 const Header = () => {
@@ -16,7 +17,7 @@ const Header = () => {
                 </button>
                 <SearchNormal size={30} />
                 <Chart size={30} />
-                <Notification size={30} />
+                <NotificationSheet />
                 <AvartarDropDown />
             </div>
             {/* <Image src={images.logowithtextblack} width={100} height={100} alt='' /> */}
