@@ -12,6 +12,7 @@ import {
   MessageText,
 } from 'iconsax-reactjs'
 import React, { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 
 const tabs = [
   { id: 'settings', label: 'Settings' },
@@ -25,12 +26,14 @@ const settingsSections = [
     title: 'Billing',
     description: 'Manage invoices, subscriptions and charges.',
     icon: <Tag size={30} />,
+    href: ''
   },
   {
     id: 'payments',
     title: 'Payments',
     description: 'Configure payment methods and payouts.',
     icon: <Card size={30} />,
+    href: ''
   },
 ]
 
@@ -40,24 +43,28 @@ const businessSections = [
     title: 'Business Setup',
     description: 'Manage your business details and preferences.',
     icon: <Briefcase size={30} />,
+    href: '/portal/vendor/settings/business-details'
   },
   {
     id: 'scheduling',
     title: 'Scheduling',
     description: 'Control appointment rules and availability.',
     icon: <Calendar size={30} />,
+    href: '/portal/vendor/settings/avalability'
   },
   {
     id: 'sales',
     title: 'Sales',
     description: 'Configure pricing, discounts and upsells.',
     icon: <DollarCircle size={30} />,
+    href: ''
   },
   {
     id: 'team',
     title: 'Team',
     description: 'Invite and manage team members.',
     icon: <Profile2User size={30} />,
+    href: ''
   },
 ]
 
@@ -67,24 +74,28 @@ const otherSections = [
     title: 'Marketing',
     description: 'Grow your business with campaigns and outreach.',
     icon: <MessageText size={30} />,
+    href: ''
   },
   {
     id: 'promotions',
     title: 'Promotions',
     description: 'Create special offers and limited-time deals.',
     icon: <DiscountShape size={30} />,
+    href: ''
   },
   {
     id: 'promos',
     title: 'Promos',
     description: 'Manage promo codes and discounts.',
     icon: <Tag size={30} />,
+    href: ''
   },
   {
     id: 'notifications',
     title: 'Notifications',
     description: 'Control alerts, reminders and system messages.',
     icon: <Notification size={30} />,
+    href: ''
   },
 ]
 
@@ -163,7 +174,7 @@ const SettingsPage = () => {
           <h3 className="text-lg font-semibold mb-4">General Settings</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {settingsSections.map((section) => (
-              <div
+              <Link href={section.href}
                 key={section.id}
                 className="border-2 border-[#E9EBEC] rounded-lg p-6 hover:shadow-sm transition"
               >
@@ -172,7 +183,7 @@ const SettingsPage = () => {
                   <h3 className="text-lg font-semibold">{section.title}</h3>
                   <p className="text-gray-500 text-sm">{section.description}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -182,7 +193,7 @@ const SettingsPage = () => {
           <h3 className="text-lg font-semibold mb-4">Business Settings</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {businessSections.map((section) => (
-              <div
+              <Link href={section.href}
                 key={section.id}
                 className="border-2 border-[#E9EBEC] rounded-lg p-6 hover:shadow-sm transition"
               >
@@ -191,7 +202,7 @@ const SettingsPage = () => {
                   <h3 className="text-lg font-semibold">{section.title}</h3>
                   <p className="text-gray-500 text-sm">{section.description}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -201,7 +212,7 @@ const SettingsPage = () => {
           <h3 className="text-lg font-semibold mb-4">Growth & Engagement</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {otherSections.map((section) => (
-              <div
+              <Link href={section.href}
                 key={section.id}
                 className="border-2 border-[#E9EBEC] rounded-lg p-6 hover:shadow-sm transition"
               >
@@ -210,7 +221,7 @@ const SettingsPage = () => {
                   <h3 className="text-lg font-semibold">{section.title}</h3>
                   <p className="text-gray-500 text-sm">{section.description}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

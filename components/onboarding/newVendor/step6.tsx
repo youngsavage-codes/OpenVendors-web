@@ -59,15 +59,17 @@ const Step6: React.FC = () => {
 
   return (
     <div className="space-y-4 relative">
-      <div className="relative flex items-center">
-        <CustomInput
-          label="Where's your business located?"
-          placeholder="Enter business address"
-          value={address}
-          onChange={(e) => handleChange(e.target.value)}
-          type="text"
-          className="w-full"
-        />
+      <div className="flex items-center w-full">
+        <div className='w-full'>
+          <CustomInput
+            label="Where's your business located?"
+            placeholder="Enter business address"
+            value={address}
+            onChange={(e) => handleChange(e.target.value)}
+            type="text"
+            className="w-full"
+          />
+        </div>
         <button
           type="button"
           onClick={handleUseCurrentLocation}
