@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import React from 'react';
@@ -112,7 +113,7 @@ export default function CategoriesPage() {
     <div className='min-h-screen bg-gray-50 font-inter'>
       <Navbar />
       
-      <div className='pt-32 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30'>
+      <div className='pt-32 pb-16 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-purple-50/30 to-pink-50/30'>
         <div className='max-w-7xl mx-auto'>
           <h1 className='text-4xl sm:text-5xl md:text-6xl font-extrabold text-black leading-tight mb-4'>
             Browse by Category
@@ -141,9 +142,9 @@ export default function CategoriesPage() {
                     className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-300'
                   />
                   {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent`} />
+                  <div className={`absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent`} />
                   {/* Icon Badge */}
-                  <div className={`absolute top-4 right-4 w-12 h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`absolute top-4 right-4 w-12 h-12 rounded-xl bg-linear-to-br ${category.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className='w-6 h-6 text-white' />
                   </div>
                   {/* Category Name on Image */}

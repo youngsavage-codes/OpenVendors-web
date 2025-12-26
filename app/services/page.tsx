@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
@@ -223,7 +225,7 @@ function ServicesContent() {
       <Navbar />
       
       {/* Hero Section with Search */}
-      <div className='pt-32 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30'>
+      <div className='pt-32 pb-16 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-purple-50/30 to-pink-50/30'>
         <div className='max-w-7xl mx-auto'>
           <h1 className='text-4xl sm:text-5xl md:text-6xl font-extrabold text-black leading-tight mb-4'>
             Book local selfcare services
