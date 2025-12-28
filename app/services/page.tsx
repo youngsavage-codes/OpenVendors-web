@@ -8,178 +8,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-
-// Mock services data
-const services = [
-  {
-    id: 1,
-    name: 'Haircut & Styling',
-    category: 'Hair Salons',
-    vendor: 'Elite Hair Studio',
-    image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400',
-    price: '$45',
-    duration: '60 min',
-    rating: 4.8,
-    reviews: 234,
-    location: 'New York, NY',
-    available: true,
-    description: 'Professional haircut with styling and blow-dry'
-  },
-  {
-    id: 2,
-    name: 'Gel Manicure',
-    category: 'Nails',
-    vendor: 'Nail Artistry',
-    image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400',
-    price: '$35',
-    duration: '45 min',
-    rating: 4.9,
-    reviews: 189,
-    location: 'Los Angeles, CA',
-    available: true,
-    description: 'Long-lasting gel polish with nail shaping'
-  },
-  {
-    id: 3,
-    name: 'Lash Extensions',
-    category: 'Eyebrows & Lashes',
-    vendor: 'Lash Luxe',
-    image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400',
-    price: '$120',
-    duration: '90 min',
-    rating: 4.7,
-    reviews: 312,
-    location: 'Miami, FL',
-    available: true,
-    description: 'Classic lash extensions full set'
-  },
-  {
-    id: 4,
-    name: 'Facial Treatment',
-    category: 'Skincare',
-    vendor: 'Glow Spa',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400',
-    price: '$85',
-    duration: '60 min',
-    rating: 4.9,
-    reviews: 267,
-    location: 'Chicago, IL',
-    available: true,
-    description: 'Deep cleansing facial with extraction'
-  },
-  {
-    id: 5,
-    name: 'Swedish Massage',
-    category: 'Massage',
-    vendor: 'Tranquil Massage',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400',
-    price: '$90',
-    duration: '60 min',
-    rating: 4.8,
-    reviews: 445,
-    location: 'Boston, MA',
-    available: true,
-    description: 'Relaxing full body Swedish massage'
-  },
-  {
-    id: 6,
-    name: 'Bridal Makeup',
-    category: 'Makeup',
-    vendor: 'Bridal Beauty Co',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400',
-    price: '$150',
-    duration: '90 min',
-    rating: 5.0,
-    reviews: 156,
-    location: 'Dallas, TX',
-    available: true,
-    description: 'Complete bridal makeup application'
-  },
-  {
-    id: 7,
-    name: 'Hair Color',
-    category: 'Hair Salons',
-    vendor: 'Color Studio',
-    image: 'https://images.unsplash.com/photo-1560869713-7d563b7c4b0c?w=400',
-    price: '$120',
-    duration: '120 min',
-    rating: 4.6,
-    reviews: 298,
-    location: 'Seattle, WA',
-    available: true,
-    description: 'Full hair color service with highlights'
-  },
-  {
-    id: 8,
-    name: 'Brow Lamination',
-    category: 'Eyebrows & Lashes',
-    vendor: 'Brow Boutique',
-    image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400',
-    price: '$55',
-    duration: '45 min',
-    rating: 4.8,
-    reviews: 223,
-    location: 'Portland, OR',
-    available: true,
-    description: 'Brow lamination and tinting service'
-  },
-  {
-    id: 9,
-    name: 'Deep Tissue Massage',
-    category: 'Massage',
-    vendor: 'Therapeutic Touch',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400',
-    price: '$110',
-    duration: '90 min',
-    rating: 4.7,
-    reviews: 189,
-    location: 'Denver, CO',
-    available: true,
-    description: 'Therapeutic deep tissue massage'
-  },
-  {
-    id: 10,
-    name: 'Acrylic Nails',
-    category: 'Nails',
-    vendor: 'Nail Perfection',
-    image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400',
-    price: '$50',
-    duration: '75 min',
-    rating: 4.5,
-    reviews: 167,
-    location: 'Atlanta, GA',
-    available: true,
-    description: 'Full set acrylic nails with design'
-  },
-  {
-    id: 11,
-    name: 'Hair Highlights',
-    category: 'Hair Salons',
-    vendor: 'Highlight Studio',
-    image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400',
-    price: '$95',
-    duration: '90 min',
-    rating: 4.8,
-    reviews: 201,
-    location: 'San Francisco, CA',
-    available: true,
-    description: 'Professional hair highlighting service'
-  },
-  {
-    id: 12,
-    name: 'Facial Rejuvenation',
-    category: 'Skincare',
-    vendor: 'Youthful Skin Spa',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400',
-    price: '$125',
-    duration: '75 min',
-    rating: 4.9,
-    reviews: 312,
-    location: 'Phoenix, AZ',
-    available: true,
-    description: 'Anti-aging facial treatment'
-  },
-];
+import ServiceDetailsModal from '@/components/ServiceDetailsModal';
+import { services, vendorIdMap } from '@/components/services/servicesData';
 
 const categories = ['All', 'Hair Salons', 'Nails', 'Eyebrows & Lashes', 'Skincare', 'Massage', 'Makeup'];
 
@@ -193,6 +23,8 @@ function ServicesContent() {
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [minRating, setMinRating] = useState(0);
+  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (categoryParam) {
@@ -218,6 +50,16 @@ function ServicesContent() {
     setLocation('');
     setPriceRange([0, 200]);
     setMinRating(0);
+  };
+
+  const handleServiceClick = (service: typeof services[0]) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
   };
 
   return (
@@ -272,7 +114,7 @@ function ServicesContent() {
               </div>
               
               <button className='w-full lg:w-auto lg:ml-4 bg-black text-white rounded-full px-8 py-3 font-medium hover:bg-gray-800 transition-colors text-sm sm:text-base'>
-                Search Fresha
+                Search
               </button>
             </div>
           </div>
@@ -381,9 +223,9 @@ function ServicesContent() {
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
               {filteredServices.map((service) => (
-                <Link
+                <div
                   key={service.id}
-                  href={`/vendor/${service.id}`}
+                  onClick={() => handleServiceClick(service)}
                   className='group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300 cursor-pointer'
                 >
                   <div className='relative h-48 overflow-hidden'>
@@ -434,19 +276,31 @@ function ServicesContent() {
                       <div>
                         <span className='text-2xl font-bold text-black'>{service.price}</span>
                       </div>
-                      <button className='px-6 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors'>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleServiceClick(service);
+                        }}
+                        className='px-6 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors'
+                      >
                         Book Now
                       </button>
                     </div>
                     
                     <p className='text-xs text-gray-500 mt-2'>{service.vendor}</p>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </>
         )}
       </div>
+
+      <ServiceDetailsModal
+        service={selectedService}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
 
       <Footer />
     </div>

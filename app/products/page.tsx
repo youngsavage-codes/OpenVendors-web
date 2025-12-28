@@ -8,122 +8,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
-
-// Mock product data
-const products = [
-  {
-    id: 1,
-    name: 'Premium Hair Treatment Package',
-    category: 'Hair Salons',
-    image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400',
-    price: '$89',
-    originalPrice: '$120',
-    rating: 4.8,
-    reviews: 234,
-    duration: '90 min',
-    description: 'Deep conditioning treatment with premium products',
-    location: 'New York, NY',
-    vendor: 'Elite Hair Studio'
-  },
-  {
-    id: 2,
-    name: 'Gel Manicure & Pedicure Combo',
-    category: 'Nails',
-    image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400',
-    price: '$65',
-    originalPrice: '$85',
-    rating: 4.9,
-    reviews: 189,
-    duration: '75 min',
-    description: 'Long-lasting gel polish with nail art options',
-    location: 'Los Angeles, CA',
-    vendor: 'Nail Artistry'
-  },
-  {
-    id: 3,
-    name: 'Lash Extensions Full Set',
-    category: 'Eyebrows & Lashes',
-    image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400',
-    price: '$150',
-    originalPrice: '$180',
-    rating: 4.7,
-    reviews: 312,
-    duration: '120 min',
-    description: 'Classic, volume, or hybrid lash extensions',
-    location: 'Miami, FL',
-    vendor: 'Lash Luxe'
-  },
-  {
-    id: 4,
-    name: 'Facial Rejuvenation Treatment',
-    category: 'Skincare',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400',
-    price: '$95',
-    originalPrice: '$130',
-    rating: 4.9,
-    reviews: 267,
-    duration: '60 min',
-    description: 'Anti-aging facial with premium serums',
-    location: 'Chicago, IL',
-    vendor: 'Glow Spa'
-  },
-  {
-    id: 5,
-    name: 'Deep Tissue Massage',
-    category: 'Massage',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400',
-    price: '$110',
-    originalPrice: '$140',
-    rating: 4.8,
-    reviews: 445,
-    duration: '90 min',
-    description: 'Therapeutic deep tissue massage for muscle relief',
-    location: 'Boston, MA',
-    vendor: 'Tranquil Massage'
-  },
-  {
-    id: 6,
-    name: 'Bridal Makeup Package',
-    category: 'Makeup',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400',
-    price: '$200',
-    originalPrice: '$250',
-    rating: 5.0,
-    reviews: 156,
-    duration: '120 min',
-    description: 'Complete bridal makeup with trial session',
-    location: 'Dallas, TX',
-    vendor: 'Bridal Beauty Co'
-  },
-  {
-    id: 7,
-    name: 'Hair Color & Highlights',
-    category: 'Hair Salons',
-    image: 'https://images.unsplash.com/photo-1560869713-7d563b7c4b0c?w=400',
-    price: '$180',
-    originalPrice: '$220',
-    rating: 4.6,
-    reviews: 298,
-    duration: '150 min',
-    description: 'Full color service with premium highlights',
-    location: 'Seattle, WA',
-    vendor: 'Color Studio'
-  },
-  {
-    id: 8,
-    name: 'Brow Lamination & Tint',
-    category: 'Eyebrows & Lashes',
-    image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400',
-    price: '$55',
-    originalPrice: '$70',
-    rating: 4.8,
-    reviews: 223,
-    duration: '45 min',
-    description: 'Brow shaping, lamination, and tinting service',
-    location: 'Portland, OR',
-    vendor: 'Brow Boutique'
-  },
-];
+import PurchaseModal from '@/components/PurchaseModal';
+import { products } from '@/components/products/productsData';
 
 const categories = ['All', 'Hair Salons', 'Nails', 'Eyebrows & Lashes', 'Skincare', 'Massage', 'Makeup'];
 
@@ -131,7 +17,10 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('popular');
+  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
+  // Filter products based on search and category
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -140,6 +29,7 @@ export default function ProductsPage() {
     return matchesCategory && matchesSearch;
   });
 
+  // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === 'popular') return b.reviews - a.reviews;
     if (sortBy === 'rating') return b.rating - a.rating;
@@ -147,6 +37,30 @@ export default function ProductsPage() {
     if (sortBy === 'price-high') return parseFloat(b.price.replace('$', '')) - parseFloat(a.price.replace('$', ''));
     return 0;
   });
+
+  // Group products by category when "All" is selected
+  const productsByCategory = selectedCategory === 'All' 
+    ? categories.filter(cat => cat !== 'All').map(category => ({
+        category,
+        products: sortedProducts.filter(p => p.category === category)
+      })).filter(group => group.products.length > 0)
+    : [{ category: selectedCategory, products: sortedProducts }];
+
+  const handleBuyNow = (product: typeof products[0], e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedProduct(product);
+    setIsPurchaseModalOpen(true);
+  };
+
+  const handleClosePurchaseModal = () => {
+    setIsPurchaseModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handlePurchaseComplete = () => {
+    // Optionally handle post-purchase actions
+  };
 
   return (
     <div className='min-h-screen bg-gray-50 font-inter'>
@@ -232,83 +146,110 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Products Grid */}
+      {/* Products by Category */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12'>
-        {sortedProducts.length === 0 ? (
+        {productsByCategory.length === 0 ? (
           <div className='text-center py-16'>
             <p className='text-gray-500 text-lg'>No products found. Try adjusting your filters.</p>
           </div>
         ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-            {sortedProducts.map((product) => (
-              <Link
-                key={product.id}
-                href={`/vendor/${product.id}`}
-                className='group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300 cursor-pointer'
-              >
-                <div className='relative h-48 overflow-hidden'>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-300'
-                  />
-                  {product.originalPrice && (
-                    <div className='absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold'>
-                      {Math.round((1 - parseFloat(product.price.replace('$', '')) / parseFloat(product.originalPrice.replace('$', ''))) * 100)}% OFF
-                    </div>
-                  )}
-                </div>
-                
-                <div className='p-5'>
-                  <div className='flex items-start justify-between mb-2'>
-                    <span className='text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded'>
-                      {product.category}
-                    </span>
-                    <div className='flex items-center gap-1'>
-                      <Star className='w-4 h-4 fill-yellow-400 text-yellow-400' />
-                      <span className='text-sm font-semibold'>{product.rating}</span>
-                      <span className='text-xs text-gray-500'>({product.reviews})</span>
-                    </div>
-                  </div>
-                  
-                  <h3 className='text-lg font-bold text-black mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors'>
-                    {product.name}
-                  </h3>
-                  
-                  <p className='text-gray-600 text-sm mb-4 line-clamp-2'>
-                    {product.description}
-                  </p>
-                  
-                  <div className='flex items-center gap-4 text-sm text-gray-500 mb-4'>
-                    <div className='flex items-center gap-1'>
-                      <Clock className='w-4 h-4' />
-                      <span>{product.duration}</span>
-                    </div>
-                    <div className='flex items-center gap-1'>
-                      <MapPin className='w-4 h-4' />
-                      <span className='truncate'>{product.location}</span>
-                    </div>
-                  </div>
-                  
-                  <div className='flex items-center justify-between'>
-                    <div>
-                      {product.originalPrice && (
-                        <span className='text-sm text-gray-400 line-through mr-2'>
-                          {product.originalPrice}
-                        </span>
-                      )}
-                      <span className='text-2xl font-bold text-black'>{product.price}</span>
-                    </div>
-                    <button className='px-4 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors'>
-                      Book Now
-                    </button>
+          <div className='space-y-12'>
+            {productsByCategory.map(({ category, products: categoryProducts }) => (
+              <div key={category} className='space-y-6'>
+                {/* Category Header */}
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <h2 className='text-3xl font-bold text-black mb-2'>{category}</h2>
+                    <p className='text-gray-600'>
+                      {categoryProducts.length} {categoryProducts.length === 1 ? 'product' : 'products'} available
+                    </p>
                   </div>
                 </div>
-              </Link>
+
+                {/* Products Grid for this Category */}
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+                  {categoryProducts.map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/vendor/${product.id}`}
+                      className='group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300 cursor-pointer'
+                    >
+                      <div className='relative h-48 overflow-hidden'>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-300'
+                        />
+                        {product.originalPrice && (
+                          <div className='absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold'>
+                            {Math.round((1 - parseFloat(product.price.replace('$', '')) / parseFloat(product.originalPrice.replace('$', ''))) * 100)}% OFF
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className='p-5'>
+                        <div className='flex items-start justify-between mb-2'>
+                          <span className='text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded'>
+                            {product.category}
+                          </span>
+                          <div className='flex items-center gap-1'>
+                            <Star className='w-4 h-4 fill-yellow-400 text-yellow-400' />
+                            <span className='text-sm font-semibold'>{product.rating}</span>
+                            <span className='text-xs text-gray-500'>({product.reviews})</span>
+                          </div>
+                        </div>
+                        
+                        <h3 className='text-lg font-bold text-black mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors'>
+                          {product.name}
+                        </h3>
+                        
+                        <p className='text-gray-600 text-sm mb-4 line-clamp-2'>
+                          {product.description}
+                        </p>
+                        
+                        <div className='flex items-center gap-4 text-sm text-gray-500 mb-4'>
+                          <div className='flex items-center gap-1'>
+                            <Clock className='w-4 h-4' />
+                            <span>{product.duration}</span>
+                          </div>
+                          <div className='flex items-center gap-1'>
+                            <MapPin className='w-4 h-4' />
+                            <span className='truncate'>{product.location}</span>
+                          </div>
+                        </div>
+                        
+                        <div className='flex items-center justify-between'>
+                          <div>
+                            {product.originalPrice && (
+                              <span className='text-sm text-gray-400 line-through mr-2'>
+                                {product.originalPrice}
+                              </span>
+                            )}
+                            <span className='text-2xl font-bold text-black'>{product.price}</span>
+                          </div>
+                          <button 
+                            onClick={(e) => handleBuyNow(product, e)}
+                            className='px-4 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors'
+                          >
+                            Buy Now
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
       </div>
+
+      <PurchaseModal
+        product={selectedProduct}
+        isOpen={isPurchaseModalOpen}
+        onClose={handleClosePurchaseModal}
+        onPurchaseComplete={handlePurchaseComplete}
+      />
 
       <Footer />
     </div>
