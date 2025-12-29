@@ -7,7 +7,8 @@ import CustomDialog from '@/components/shared/dialog'
 import CustomInput from '@/components/shared/input'
 import CustomSelect from '@/components/shared/select'
 import CustomTextArea from '@/components/shared/textarea'
-import { useState } from 'react'
+import { ServicesService } from '@/services/services.service'
+import { useEffect, useState } from 'react'
 
 const ServicesPage = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -18,6 +19,18 @@ const ServicesPage = () => {
             setStep('image')
         }
     }
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const res = await ServicesService.getMyServiceApi();
+                console.log(res)
+            } catch(error: any) {
+
+            }
+        }
+        fetchServices()
+    }, [])
 
     const handlePrev = () => {
         if(step === 'image') {

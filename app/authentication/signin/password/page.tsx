@@ -52,17 +52,34 @@ const SigninPasswordpage = () => {
       if (res.data) {
         showToast(res.message, "success"); // ✅ use custom toast
         TokenService.setTokens(res?.data?.accessToken, res?.data?.refreshToken);
-        setUser(res?.data?.user)
-        if(!res?.data?.emailVerified) {
-          router.replace('/authentication/verifyEmail')
-        } else {
-          router.replace("/authentication/account-type");
-        }
+        setUser(res?.data?.user);
+        router.replace("/protal/vendors/dashboard");
+        // if(!res?.data?.emailVerified) {
+        //   router.replace('/authentication/verifyEmail')
+        // } else {
+        //   router.replace("/protal/vendors/dashboard");
+        // }
       }
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Something went wrong", "error"); // ✅ error toast
     }
   };
+
+  // const fetchMyBusiness = async (user: any) => {
+  //   if(user?.businessProfileCompleted) {
+  //     router.replace()
+  //   } 
+  //   try {
+  //     const res = await BusinessService.getMyWorkspaceApi();
+  //     if(res.data) {
+        
+  //     }
+  //   } catch(error: any) {
+  //     if(error.response.data.errorCode === 400) {
+  //       router.replace("/authentication/account-type");
+  //     } 
+  //   }
+  // }
 
   return (
     <div className="w-full lg:w-2/3">
