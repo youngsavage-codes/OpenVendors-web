@@ -3,12 +3,13 @@
 import { Lightbulb } from 'lucide-react'
 import React, { useState } from 'react'
 
-const teamOptions = [
-  { label: '2-5 people', value: '2-5' },
-  { label: '5-10 people', value: '5-10' },
-  { label: '10-20 people', value: '10-20' },
-  { label: '20+ people', value: '20+' },
+export const teamSizeOptions = [
+  { label: '2–5 people', value: '2_5' },
+  { label: '5–10 people', value: '5_10' },
+  { label: '10–20 people', value: '10_20' },
+  { label: '20+ people', value: '20_plus' },
 ]
+
 
 const Step4: React.FC = () => {
   const [selected, setSelected] = useState<string>('')
@@ -20,7 +21,7 @@ const Step4: React.FC = () => {
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {teamOptions.map(({ label, value }) => {
+        {teamSizeOptions.map(({ label, value }) => {
           const isSelected = selected === value
           return (
             <div

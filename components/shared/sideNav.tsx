@@ -105,7 +105,7 @@ const IconSidebar = ({
             </button>
 
             {/* Tooltip */}
-            <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
+            <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
               {item.label}
             </span>
           </div>
@@ -129,7 +129,7 @@ const SubMenuSidebar = ({
   return (
     <aside
       className={cn(
-        "absolute top-0 left-20 h-screen w-56 border-r-2 border-[#E9EBEC] bg-white",
+        "absolute top-0 left-20 h-screen w-56 border-r-2 border-[#E9EBEC] bg-white z-40",
         "origin-left transform transition-all duration-300 ease-out",
         isOpen
           ? "scale-x-100 opacity-100"
