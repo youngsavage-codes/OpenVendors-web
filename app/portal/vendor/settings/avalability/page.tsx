@@ -1,7 +1,8 @@
 'use client'
 
 import CustomButton from '@/components/shared/button'
-import React, { useState } from 'react'
+import { AvailabilityService } from '@/services/availability.service'
+import React, { useEffect, useState } from 'react'
 
 const daysOfWeek = [
   'MONDAY',
@@ -29,6 +30,19 @@ const AvailabilityPage = () => {
       isAvailable: day !== 'SUNDAY',
     }))
   )
+
+  useEffect(() => {
+    fetchMyAvailability();
+  }, []);
+
+  const fetchMyAvailability = async () => {
+    try { 
+      const res = await AvailabilityService.getMyAvailabilityApi();
+      console.log('res', res)
+    } catch(error: any) {
+      console.log(error);
+    }
+  }
 
   const updateSchedule = (
     index: number,

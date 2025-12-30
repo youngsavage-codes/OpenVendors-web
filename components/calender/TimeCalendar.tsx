@@ -56,7 +56,7 @@ const TimeCalendar: React.FC<TimeCalendarProps> = ({ appointments, startHour = 8
   const positionedAppointments = getPositionedAppointments(appointments)
 
   return (
-    <div className="relative grid grid-cols-[80px_1fr] rounded-lg border-2 border-[#E9EBEC] bg-white z-50">
+    <div className="relative grid grid-cols-[80px_1fr] rounded-lg border-2 border-[#E9EBEC] z-20 bg-white">
       {/* Time column */}
       <div className="border-r-2 border-[#E9EBEC] bg-gray-50 relative pt-10">
         {HOURS.map(hour => (

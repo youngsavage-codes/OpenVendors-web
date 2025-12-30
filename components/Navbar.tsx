@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 
 'use client';
 import React, { useState, useEffect } from 'react';
@@ -38,7 +39,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center h-14 sm:h-16">
 
-            <a href="#" className="text-xl sm:text-2xl md:text-3xl font-bold text-black">
+            <a href="/" className="text-xl sm:text-2xl md:text-3xl font-bold text-black">
               <Image src={images.logoBlack} width={100} height={100} alt='logo' />
             </a>
 
