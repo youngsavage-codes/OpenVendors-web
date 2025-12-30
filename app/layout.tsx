@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import ToastContainer from "@/components/shared/toastContainer";
+import UseWrapper from "@/hooks/useWrapper";
 
 const MonoSans = localFont({
   src: [
@@ -28,8 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${MonoSans.variable} antialiased`}>
-        {children}
-        <ToastContainer /> 
+        <UseWrapper>
+            {children}
+        </UseWrapper>
       </body>
     </html>
   );

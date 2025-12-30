@@ -2,7 +2,7 @@
 
 import AuthPrompt from "@/components/shared/authPrompt";
 import CustomButton from "@/components/shared/button";
-import { AuthService } from "@/services/auth.services";
+import { useMutationApi } from "@/hooks/useMutation";
 import { useEmailStore } from "@/store/useEmailStore";
 import { useToastStore } from "@/store/useToastStore";
 import { useRouter } from "next/navigation";
@@ -11,35 +11,34 @@ import { useEffect, useState } from "react";
 const ForgotPasswordPage = () => {
   const router = useRouter();
   const { email, hasHydrated } = useEmailStore();
-  const [sending, setSending] = useState(false);
   const showToast = useToastStore((state) => state.showToast);
 
-    useEffect(() => {
-        if (!hasHydrated) return;
+  const forgotPasswordMutation = useMutationApi({
+    url: '/auth/password/forgot',
+    onSuccess: (res) => {
+      showToast(res.message, "success"); // ✅ use custom toast
+      router.push('/authentication/resetPassword')
+    },
+    onError: (error: any) => {
+      showToast(error?.response?.data?.message || 'Something went wrong', 'error');
+    },
+  })
 
-        if (!email) {
-            router.replace("/authentication/signin");
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (!email) {
+        router.replace("/authentication/signin");
     }
-    }, [hasHydrated, email, router]);
+  }, [hasHydrated, email, router]);
 
-    if (!hasHydrated) return null;
-    if (!email) return null;
-
-
+  if (!hasHydrated) return null;
+  if (!email) return null;
 
   const handleSendOtp = async () => {
-    setSending(true);
-    try {
-      const res = await AuthService.forgotPasswordApi(email);
-      if (res) {
-        showToast(res.message, "success");
-        router.push('/authentication/resetPassword')
-      }
-    } catch (error: any) {
-      showToast(error?.response?.data?.message || "Something went wrong", "error");
-    } finally {
-      setSending(false);
-    }
+    forgotPasswordMutation.mutateAsync({
+      email
+    })
   };
 
 
@@ -56,7 +55,12 @@ const ForgotPasswordPage = () => {
         </div>
 
         <div className="space-y-3">
-          <CustomButton disabled={!email} onClick={handleSendOtp} isLoading={sending} className="w-full mt-5">
+          <CustomButton 
+            disabled={!email || forgotPasswordMutation.isPending} 
+            onClick={handleSendOtp} 
+            isLoading={forgotPasswordMutation.isPending} 
+            className="w-full mt-5"  
+          >
             Reset Password
           </CustomButton>
 

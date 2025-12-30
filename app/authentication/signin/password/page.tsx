@@ -2,9 +2,9 @@
 
 import CustomButton from "@/components/shared/button";
 import PasswordInput from "@/components/shared/passwordInput";
+import { useMutationApi } from "@/hooks/useMutation";
+import { setAccessToken } from "@/lib/tokenManager";
 import { verifyLoginPasswordSchema } from "@/schema/authSchema";
-import { AuthService } from "@/services/auth.services";
-import TokenService from "@/services/token.service";
 import { useEmailStore } from "@/store/useEmailStore";
 import { useToastStore } from "@/store/useToastStore";
 import { useUserStore } from "@/store/useUserStore";
@@ -37,6 +37,19 @@ const SigninPasswordpage = () => {
     reValidateMode: "onChange",
   });
 
+    const loginMutation = useMutationApi({
+      url: '/auth/login',
+      onSuccess(res) {
+        showToast(res.message, "success"); // ✅ use custom toast
+        setAccessToken(res?.data?.accessToken);
+        setUser(res?.data?.user);
+        router.replace("/portal/vendor/dashboard");
+      },
+      onError(error: any) {
+        showToast(error?.response?.data?.message || "Something went wrong", "error");
+      },
+  })
+
   useEffect(() => {
     if (!hasHydrated) return;
     if (!email) router.replace("/authentication/signin");
@@ -44,42 +57,14 @@ const SigninPasswordpage = () => {
 
   if (!hasHydrated) return null;
   if (!email) return null;
+  
 
-  const onSubmit = async ({ password }: SignInFormValues) => {
-    try {
-      const res = await AuthService.loginApi(email, password);
-
-      if (res.data) {
-        showToast(res.message, "success"); // ✅ use custom toast
-        TokenService.setTokens(res?.data?.accessToken, res?.data?.refreshToken);
-        setUser(res?.data?.user);
-        router.replace("/protal/vendors/dashboard");
-        // if(!res?.data?.emailVerified) {
-        //   router.replace('/authentication/verifyEmail')
-        // } else {
-        //   router.replace("/protal/vendors/dashboard");
-        // }
-      }
-    } catch (error: any) {
-      showToast(error?.response?.data?.message || "Something went wrong", "error"); // ✅ error toast
-    }
+  const onSubmit = async (values: SignInFormValues) => {
+    loginMutation.mutateAsync({
+      email,
+      password: values.password
+    })
   };
-
-  // const fetchMyBusiness = async (user: any) => {
-  //   if(user?.businessProfileCompleted) {
-  //     router.replace()
-  //   } 
-  //   try {
-  //     const res = await BusinessService.getMyWorkspaceApi();
-  //     if(res.data) {
-        
-  //     }
-  //   } catch(error: any) {
-  //     if(error.response.data.errorCode === 400) {
-  //       router.replace("/authentication/account-type");
-  //     } 
-  //   }
-  // }
 
   return (
     <div className="w-full lg:w-2/3">
@@ -109,8 +94,8 @@ const SigninPasswordpage = () => {
           </Link>
 
           <CustomButton
-            isLoading={isSubmitting}
-            disabled={!isValid}
+            isLoading={loginMutation.isPending}
+            disabled={!isValid || loginMutation.isPending}
             className="w-full mt-5"
           >
             Login

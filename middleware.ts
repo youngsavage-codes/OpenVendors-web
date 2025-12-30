@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const AUTH_TOKEN_COOKIE = "authToken"; // change this if your cookie name is different
+const AUTH_TOKEN_COOKIE = "access_token"; // change this if your cookie name is different
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

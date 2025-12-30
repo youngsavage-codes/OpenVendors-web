@@ -20,18 +20,6 @@ const ServicesPage = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                const res = await ServicesService.getMyServiceApi();
-                console.log(res)
-            } catch(error: any) {
-
-            }
-        }
-        fetchServices()
-    }, [])
-
     const handlePrev = () => {
         if(step === 'image') {
             setStep('data')

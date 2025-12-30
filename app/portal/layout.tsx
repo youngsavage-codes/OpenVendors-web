@@ -1,62 +1,49 @@
 'use client'
 
-import Header from "@/components/shared/header";
-import SideNav from "@/components/shared/sideNav";
-import { BusinessService } from "@/services/business.service";
-import { UserService } from "@/services/user.service";
-import { useUserStore } from "@/store/useUserStore";
-import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { ReactNode, useEffect, useState } from "react";
+import { useFetch } from "@/hooks/useFetch"
+import { useUserStore } from "@/store/useUserStore"
+import { Loader } from "lucide-react"
+import { useRouter } from "next/navigation"
+import React, { ReactNode, useEffect } from "react"
 
 interface DashboardLayoutProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const router = useRouter()
-  const setUser = useUserStore((state) => state.setUser);
-  const [loading, setLoading] = useState(true);
+  const setUser = useUserStore((state) => state.setUser)
 
+  const {
+    data,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useFetch({
+    url: '/auth/me',
+    keys: ['auth-user'],
+  })
+
+  // ✅ Handle auth result
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        setLoading(true);
-        const res = await UserService.userDetailsApil();
-        if (res?.data) {
-          setUser(res.data);
-          // router.replace("/protal/vendors/dashboard");
-          // if(res?.data?.emailVerified) {
-          //   router.replace("/protal/vendors/dashboard");
-          // } else {
-          //   router.replace('/authentication/verifyEmail')
-          //   const res = await BusinessService.getMyWorkspaceApi();
-          //   console.log('res', res)
-          // }
-        }
-      } catch (error: any) {
-        console.error("Failed to fetch user details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (isSuccess && data?.data) {
+      setUser(data.data)
+    }
 
-    fetchUserDetails();
-  }, [setUser]);
+    if (isError) {
+      router.replace('/authentication/signin')
+    }
+  }, [isSuccess, isError, data, setUser, router])
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <Loader className="h-10 w-10 animate-spin" />
       </div>
-    );
+    )
   }
 
-  return (
-      <div className="max-h-screen">
-        {children}
-      </div>
-  );
-};
+  return <div className="min-h-screen">{children}</div>
+}
 
-export default DashboardLayout;
+export default DashboardLayout

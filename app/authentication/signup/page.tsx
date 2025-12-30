@@ -14,10 +14,10 @@ import * as countryCodes from "country-codes-list";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "@/schema/authSchema";
-import { AuthService } from "@/services/auth.services";
 import { toast } from "react-toastify";
 import { useEmailStore } from "@/store/useEmailStore";
 import { useToastStore } from "@/store/useToastStore";
+import { useMutationApi } from "@/hooks/useMutation";
 
 interface SignUpFormValues {
   firstName: string;
@@ -54,6 +54,17 @@ const SignUpContent = () => {
     },
   });
 
+    const signUpMutation = useMutationApi({
+      url: '/auth/register',
+      onSuccess: (res) => {
+        showToast(res.message, "success"); // ✅ use custom toast
+        router.replace("/authentication/account-type");
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || 'Something went wrong')
+      },
+  })
+
   useEffect(() => {
     if (!hasHydrated) return;
   
@@ -87,6 +98,7 @@ const SignUpContent = () => {
     [myCountryObject]
   );
 
+
   const onSubmit = async (data: SignUpFormValues) => {
     const payload: any = {
       email: data.email,
@@ -97,17 +109,8 @@ const SignUpContent = () => {
       country: data.country,
       role: "user"
     }
-    
-    try {
-      const res = await AuthService.registerApi(payload);
-      if(res.success) {
-        // Here you can call your API to register the user
-        showToast(res.message, "success"); // ✅ use custom toast
-        router.replace("/authentication/account-type");
-      }
-    } catch(error: any) {
-      showToast(error?.response?.data?.message || "Something went wrong", "error"); // ✅ error toast
-    }
+
+    signUpMutation.mutateAsync(payload)
   };
 
   return (
@@ -204,8 +207,8 @@ const SignUpContent = () => {
         <CustomButton
           type="submit"
           className="w-full mt-5"
-          isLoading={isSubmitting}
-          disabled={!isValid}
+          isLoading={signUpMutation.isPending}
+          disabled={!isValid || signUpMutation.isPending}
         >
           Create Account
         </CustomButton>

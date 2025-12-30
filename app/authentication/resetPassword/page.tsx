@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CustomButton from '@/components/shared/button';
@@ -9,7 +9,7 @@ import { useEmailStore } from '@/store/useEmailStore';
 import { useToastStore } from '@/store/useToastStore';
 import { useRouter } from 'next/navigation';
 import { resetPasswordSchema } from '@/schema/authSchema';
-import { AuthService } from '@/services/auth.services';
+import { useMutationApi } from '@/hooks/useMutation';
 
 type ResetPasswordFormValues = {
   email: string;
@@ -21,7 +21,6 @@ const ResetPasswordPage = () => {
   const router = useRouter();
   const { email, hasHydrated } = useEmailStore();
   const showToast = useToastStore((state) => state.showToast);
-  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -32,26 +31,30 @@ const ResetPasswordPage = () => {
     mode: 'onChange',
   });
 
+    const resetPasswordMutation = useMutationApi({
+        url: '/auth/password/reset',
+        onSuccess: (res) => {
+          showToast(res.message, "success"); // ✅ use custom toast
+          router.replace('/authentication/signin');
+        },
+        onError: (error: any) => {
+          showToast(error?.response?.data?.message || 'Something went wrong', 'error');
+        },
+  })
+
   useEffect(() => {
     if (!hasHydrated) return;
     if (!email) router.replace('/authentication/signin');
   }, [hasHydrated, email, router]);
 
   if (!hasHydrated || !email) return null;
+  
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
-    setLoading(true);
-    try {
-      const res = await AuthService.resetPasswordApi(email, data.newPassword);
-      if (res) {
-        showToast(res.message, 'success');
-        router.replace('/authentication/signin');
-      }
-    } catch (error: any) {
-      showToast(error?.response?.data?.message || 'Something went wrong', 'error');
-    } finally {
-      setLoading(false);
-    }
+    resetPasswordMutation.mutateAsync({
+      email: data.email,
+      newPassword: data.newPassword
+    })
   };
 
   return (
@@ -80,8 +83,8 @@ const ResetPasswordPage = () => {
 
         <CustomButton
           type="submit"
-          disabled={!isValid}
-          isLoading={loading}
+          disabled={!isValid || resetPasswordMutation.isPending}
+          isLoading={resetPasswordMutation.isPending}
           className="w-full mt-5"
         >
           Reset Password

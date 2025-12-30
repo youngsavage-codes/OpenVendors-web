@@ -11,9 +11,9 @@ import CustomButton from '@/components/shared/button';
 import CustomInput from '@/components/shared/input';
 import SocialAuth from '@/components/shared/socialAuth';
 
-import { AuthService } from '@/services/auth.services';
 import { verifyLoginEmailSchema } from '@/schema/authSchema';
 import { useEmailStore } from '@/store/useEmailStore';
+import { useMutationApi } from '@/hooks/useMutation';
 
 type SignInFormValues = {
   email: string;
@@ -33,21 +33,11 @@ const SignInPage = () => {
     reValidateMode: 'onChange',
   });
 
-  const handleGoogle = () => {
-    console.log('Login with Google');
-  };
-
-  const handleApple = () => {
-    console.log('Login with Apple');
-  };
-
-  const onSubmit = async ({ email }: SignInFormValues) => {
-    try {
-      const res = await AuthService.verifyEmail(email);
-
-      setEmail(email);
-
-      if (res?.data?.exists) {
+  const verifyEmailMutation = useMutationApi({
+    url: '/auth/verify-email',
+    onSuccess: (data) => {
+      console.log(data.data)
+      if(data.data.exists) {
         router.replace(
           `/authentication/signin/password`
         );
@@ -56,12 +46,26 @@ const SignInPage = () => {
           `/authentication/signup`
         );
       }
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || 'Something went wrong'
-      );
-    }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Something went wrong')
+    },
+  })
+
+  const handleGoogle = () => {
+    console.log('Login with Google');
   };
+
+  const handleApple = () => {
+    console.log('Login with Apple');
+  };
+
+  const onSubmit = (values: SignInFormValues) => {
+    setEmail(values.email)
+    verifyEmailMutation.mutateAsync({
+      email: values.email,
+    })
+  }
 
   return (
     <div className="w-full lg:w-2/3">
@@ -85,8 +89,8 @@ const SignInPage = () => {
 
         <CustomButton
           type="submit"
-          isLoading={isSubmitting}
-          disabled={!isValid}
+          isLoading={verifyEmailMutation.isPending}
+          disabled={!isValid || verifyEmailMutation.isPending}
           className="w-full mt-5"
         >
           Continue

@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUserStore } from "@/store/useUserStore";
 import { ArrowRight2 } from "iconsax-reactjs";
-import TokenService from "@/services/token.service";
 import { useRouter } from "next/navigation";
 import { useEmailStore } from "@/store/useEmailStore";
+import { clearAccessToken } from "@/lib/tokenManager";
 
 const AvatarDropDown = () => {
   const router = useRouter()
@@ -25,7 +25,7 @@ const AvatarDropDown = () => {
   const initials = `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`;
 
   const handleLogout = () => {
-    TokenService.clearTokens();
+    clearAccessToken();
     clearUser();
     clearEmail();
     router.replace('/authentication/signin')

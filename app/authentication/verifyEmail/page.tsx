@@ -5,9 +5,9 @@ import OtpInput from "@/components/shared/otpInput";
 import CustomButton from "@/components/shared/button";
 import { useEmailStore } from "@/store/useEmailStore";
 import { useRouter } from "next/navigation";
-import { AuthService } from "@/services/auth.services";
 import { useToastStore } from "@/store/useToastStore";
 import { useUserStore } from "@/store/useUserStore";
+import { useMutationApi } from "@/hooks/useMutation";
 
 const VerifyEmailPage = () => {
   const router = useRouter();
@@ -15,10 +15,32 @@ const VerifyEmailPage = () => {
 
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(300); // 5 minutes
-  const [verifying, setVerifying] = useState(false);
-  const [resending, setResending] = useState(false);
 
   const showToast = useToastStore((state) => state.showToast);
+
+  const verifyEmailMutation = useMutationApi({
+      url: '/auth/email/verify',
+      onSuccess: (res) => {
+        showToast(res.message, "success");
+        useUserStore.getState().updateUser({ emailVerified: true });
+        router.replace('/authentication/account-type')
+      },
+      onError: (error: any) => {
+        showToast(error?.response?.data?.message || 'Something went wrong', 'error');
+      },
+  })
+
+  const resendOtpMutation = useMutationApi({
+      url: '/auth/email/send-otp',
+      onSuccess: (res) => {
+        showToast(res.message, "success");
+        setOtp("");
+        setTimer(300); // reset to 5 minutes
+      },
+      onError: (error: any) => {
+        showToast(error?.response?.data?.message || 'Something went wrong', 'error');
+      },
+  })
 
   // Redirect if email is missing
   useEffect(() => {
@@ -36,41 +58,17 @@ const VerifyEmailPage = () => {
 
   if (!hasHydrated || !email) return null;
 
-  const handleSubmit = async () => {
-    if (otp.length < 6) {
-      showToast("Please enter the full OTP", "error");
-      return;
-    }
 
-    setVerifying(true);
-    try {
-      const res = await AuthService.verifyEmailOtpApi(email, otp);
-      if (res) {
-        showToast(res.message, "success");
-        useUserStore.getState().updateUser({ emailVerified: true });
-        router.replace('/authentication/account-type')
-      }
-    } catch (error: any) {
-      showToast(error?.response?.data?.message || "Something went wrong", "error");
-    } finally {
-      setVerifying(false);
-    }
+  const handleSubmit = async () => {
+    verifyEmailMutation.mutateAsync({
+      email, otp
+    })
   };
 
   const handleResend = async () => {
-    setResending(true);
-    try {
-      const res = await AuthService.sendVerifyEmailOtpApi(email);
-      if (res) {
-        showToast(res.message, "success");
-        setOtp("");
-        setTimer(300); // reset to 5 minutes
-      }
-    } catch (error: any) {
-      showToast(error?.response?.data?.message || "Something went wrong", "error");
-    } finally {
-      setResending(false);
-    }
+    resendOtpMutation.mutateAsync({
+      email
+    })
   };
 
   // Format timer as Xm Ys
@@ -93,8 +91,8 @@ const VerifyEmailPage = () => {
         <OtpInput value={otp} onChange={setOtp} length={6} />
 
         <CustomButton
-          disabled={verifying}
-          isLoading={verifying}
+          disabled={otp.length < 6 || !email || verifyEmailMutation.isPending}
+          isLoading={verifyEmailMutation.isPending}
           className="w-full lg:w-1/2"
           onClick={handleSubmit}
         >
@@ -104,9 +102,9 @@ const VerifyEmailPage = () => {
         <div className="text-sm text-gray-600 mt-2">
           <button
             onClick={handleResend}
-            disabled={resending || verifying}
+            disabled={resendOtpMutation.isPending || verifyEmailMutation.isPending}
             className={`underline text-blue-600 ${
-              resending ? "opacity-50 cursor-not-allowed" : ""
+              resendOtpMutation.isPending ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             Resend OTP
