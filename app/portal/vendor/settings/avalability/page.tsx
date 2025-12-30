@@ -31,28 +31,28 @@ const AvailabilityPage = () => {
     }))
   )
 
-  useEffect(() => {
-    fetchMyAvailability();
-  }, []);
+  // useEffect(() => {
+  //   fetchMyAvailability();
+  // }, []);
 
-  const fetchMyAvailability = async () => {
-    try { 
-      const res = await AvailabilityService.getMyAvailabilityApi();
-      console.log('res', res)
-    } catch(error: any) {
-      console.log(error);
-    }
-  }
+  // const fetchMyAvailability = async () => {
+  //   try { 
+  //     const res = await AvailabilityService.getMyAvailabilityApi();
+  //     console.log('res', res)
+  //   } catch(error: any) {
+  //     console.log(error);
+  //   }
+  // }
 
-  const updateSchedule = (
-    index: number,
-    key: keyof Schedule,
-    value: any
-  ) => {
-    const updated = [...schedules]
-    updated[index] = { ...updated[index], [key]: value }
-    setSchedules(updated)
-  }
+  // const updateSchedule = (
+  //   index: number,
+  //   key: keyof Schedule,
+  //   value: any
+  // ) => {
+  //   const updated = [...schedules]
+  //   updated[index] = { ...updated[index], [key]: value }
+  //   setSchedules(updated)
+  // }
 
   const handleSave = () => {
     const payload = { schedules }
@@ -88,8 +88,8 @@ const AvailabilityPage = () => {
                 type="time"
                 value={schedule.startTime}
                 disabled={!schedule.isAvailable}
-                onChange={(e) =>
-                  updateSchedule(index, 'startTime', e.target.value)
+                onChange={(e) => {}
+                  // updateSchedule(index, 'startTime', e.target.value)
                 }
                 className="border-2 border-[#E9EBEC] rounded-md px-3 py-2 text-sm disabled:opacity-50"
               />
@@ -100,8 +100,8 @@ const AvailabilityPage = () => {
                 type="time"
                 value={schedule.endTime}
                 disabled={!schedule.isAvailable}
-                onChange={(e) =>
-                  updateSchedule(index, 'endTime', e.target.value)
+                onChange={(e) => {}
+                  // updateSchedule(index, 'endTime', e.target.value)
                 }
                 className="border-2 border-[#E9EBEC] rounded-md px-3 py-2 text-sm disabled:opacity-50"
               />
@@ -118,12 +118,12 @@ const AvailabilityPage = () => {
               </span>
 
               <button
-                onClick={() =>
-                  updateSchedule(
-                    index,
-                    'isAvailable',
-                    !schedule.isAvailable
-                  )
+                onClick={() => {}
+                  // updateSchedule(
+                  //   index,
+                  //   'isAvailable',
+                  //   !schedule.isAvailable
+                  // )
                 }
                 className={`w-12 h-6 rounded-full transition relative ${
                   schedule.isAvailable ? 'bg-green-500' : 'bg-gray-300'
