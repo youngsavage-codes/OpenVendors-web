@@ -1,4 +1,5 @@
 import CustomInput from '@/components/shared/input'
+import CustomTextArea from '@/components/shared/textarea'
 import React from 'react'
 
 const Step1 = () => {
@@ -15,6 +16,10 @@ const Step1 = () => {
           placeholder="www.yoursite.com"
           type="text"
           className='w-full'
+        />
+        <CustomTextArea
+          label='Business Description'
+          placeholder="Enter Details About Your Business"
         />
     </div>
   )

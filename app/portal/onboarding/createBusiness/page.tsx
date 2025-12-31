@@ -6,6 +6,7 @@ import Step3 from '@/components/onboarding/newVendor/step3'
 import Step4 from '@/components/onboarding/newVendor/step4'
 import Step5 from '@/components/onboarding/newVendor/step5'
 import Step6 from '@/components/onboarding/newVendor/step6'
+import Step7 from '@/components/onboarding/newVendor/step7'
 import CustomButton from '@/components/shared/button'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -55,6 +56,12 @@ const steps: Step[] = [
     title: "Set your venue's physical location",
     desc: 'Add your primary business location so your clients can easily find you.',
     component: <Step6 />,
+  },
+  {
+    label: 'Step 7',
+    title: "Add Business Image Gallery",
+    desc: 'Upload your business images to showcase your services.',
+    component: <Step7 />,
   },
 ]
 

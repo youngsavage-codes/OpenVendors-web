@@ -50,7 +50,7 @@ const formatDuration = (totalMins: number) => {
   return `${hours > 0 ? hours + 'h ' : ''}${mins}m`
 }
 
-const CustomSheet = ({ open, onOpen, client, booking, appId }: CustomSheetProps) => {
+const BookingSheet = ({ open, onOpen, client, booking, appId }: CustomSheetProps) => {
 
   const defaultClient = {
     name: "John Doe",
@@ -192,4 +192,4 @@ const CustomSheet = ({ open, onOpen, client, booking, appId }: CustomSheetProps)
   )
 }
 
-export default CustomSheet
+export default BookingSheet
