@@ -48,6 +48,7 @@ const VerifyEmailPage = () => {
       if (res) {
         showToast(res.message, "success");
         useUserStore.getState().updateUser({ emailVerified: true });
+        router.replace('/authentication/account-type')
       }
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Something went wrong", "error");
